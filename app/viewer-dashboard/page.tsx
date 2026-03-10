@@ -193,6 +193,9 @@ export default function ViewerDashboard() {
           printWindow.print()
         }
       }, 500)
+
+      // Refresh transactions to remove printed ones
+      await fetchTransactions(selectedEntryUser)
     } catch (error) {
       console.error('Error creating batch:', error)
       alert('Failed to create batch. Please try again.')
