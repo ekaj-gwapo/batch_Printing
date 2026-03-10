@@ -46,8 +46,16 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
         const batchesWithMetadata = data.map((batch: Batch) => {
           try {
             const filters = JSON.parse(batch.appliedFilters || '{}')
-            const createdDate = new Date(batch.createdAt)
-            const month = createdDate.toLocaleDateString('en-US', { month: 'long' })
+            
+            // Get the month from the user-selected date in filters, fallback to createdAt
+            let month = ''
+            if (filters.date) {
+              const filterDate = new Date(filters.date)
+              month = filterDate.toLocaleDateString('en-US', { month: 'long' })
+            } else {
+              const createdDate = new Date(batch.createdAt)
+              month = createdDate.toLocaleDateString('en-US', { month: 'long' })
+            }
             
             // Get the primary fund and bank from arrays or single values
             const funds = filters.funds || (filters.fund ? [filters.fund] : [])
