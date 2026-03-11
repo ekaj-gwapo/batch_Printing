@@ -27,7 +27,8 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
     debit: '',
     credit: '',
     remarks: '',
-    fund: 'General Fund',
+    fund: '',
+    moph_location: '',
   })
 
   const fundOptions = [
@@ -35,7 +36,10 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
     'Development Fund',
     'Trust Fund',
     'Hospital Fund',
-    'MOPH'
+  ]
+
+  const mophOptions = [
+    // MOPH locations will be added here
   ]
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -54,6 +58,11 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
     try {
       if (!userId) throw new Error('User not authenticated')
 
+      // Use MOPH location if selected, otherwise use fund
+      const selectedFund = formData.moph_location || formData.fund
+
+      if (!selectedFund) throw new Error('Please select either a Fund or MOPH location')
+
       const payload = JSON.stringify({
         bankName: formData.bank_name,
         payee: formData.payee,
@@ -67,7 +76,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         debit: parseFloat(formData.debit || '0'),
         credit: parseFloat(formData.credit || '0'),
         remarks: formData.remarks,
-        fund: formData.fund,
+        fund: selectedFund,
       })
 
       const response = await fetch(`/api/transactions?userId=${userId}`, {
@@ -94,7 +103,8 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         debit: '',
         credit: '',
         remarks: '',
-        fund: 'General Fund',
+        fund: '',
+        moph_location: '',
       })
 
       onSuccess?.()
@@ -250,19 +260,39 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         </div>
       </div>
 
-      <div>
-        <Label htmlFor="fund">Fund *</Label>
-        <select
-          id="fund"
-          name="fund"
-          value={formData.fund}
-          onChange={handleChange}
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        >
-          {fundOptions.map(option => (
-            <option key={option} value={option}>{option}</option>
-          ))}
-        </select>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="fund">Fund</Label>
+          <select
+            id="fund"
+            name="fund"
+            value={formData.fund}
+            onChange={handleChange}
+            disabled={formData.moph_location !== ''}
+            className="w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <option value="">-- Select a Fund --</option>
+            {fundOptions.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <Label htmlFor="moph_location">MOPH Location</Label>
+          <select
+            id="moph_location"
+            name="moph_location"
+            value={formData.moph_location}
+            onChange={handleChange}
+            disabled={formData.fund !== ''}
+            className="w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <option value="">-- Select MOPH Location --</option>
+            {mophOptions.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div>

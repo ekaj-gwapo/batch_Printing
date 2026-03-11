@@ -134,16 +134,25 @@ export async function POST(
         [batchId]
       )
 
-      await db.run(
-        `UPDATE transaction_batches SET transactionCount = ?, totalAmount = ? WHERE id = ?`,
-        [updatedBatch.count, updatedBatch.total, batchId]
-      )
+      // If batch has 0 transactions, delete it
+      if (updatedBatch.count === 0) {
+        await db.run(
+          `DELETE FROM transaction_batches WHERE id = ?`,
+          [batchId]
+        )
+      } else {
+        await db.run(
+          `UPDATE transaction_batches SET transactionCount = ?, totalAmount = ? WHERE id = ?`,
+          [updatedBatch.count, updatedBatch.total, batchId]
+        )
+      }
     }
 
     return NextResponse.json({
       success: true,
       restoredCount: restoredTransactions.length,
       transactions: restoredTransactions,
+      batchDeleted: batchId,
     })
   } catch (error) {
     console.error('Error restoring transactions:', error)
