@@ -96,11 +96,15 @@ export default function BatchDetails({
 
     try {
       setIsRestoring(true)
+      const txIds = Array.from(selectedTransactions)
+      console.log('[v0] Batch ID:', batch.id)
+      console.log('[v0] Transaction IDs to restore:', txIds)
+      
       const response = await fetch(`/api/batches/${batch.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          transactionIds: Array.from(selectedTransactions),
+          transactionIds: txIds,
         }),
       })
 
