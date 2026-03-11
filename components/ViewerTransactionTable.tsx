@@ -90,9 +90,10 @@ export default function ViewerTransactionTable({
               <SortableHeader label="Check No." field="checkNumber" />
               <SortableHeader label="DV #" field="dvNumber" />
               <SortableHeader label="Account Code" field="accountCode" />
+              <th className="px-4 py-3 text-left text-sm font-semibold text-emerald-900">Responsibility Center</th>
               <SortableHeader label="Payee" field="payee" />
               <SortableHeader label="Particulars" field="particulars" />
-              <th className="px-6 py-3 text-right text-sm font-semibold text-emerald-900 cursor-pointer hover:bg-emerald-100 transition-colors" onClick={() => handleSort('amount')}>
+              <th className="px-4 py-3 text-right text-sm font-semibold text-emerald-900 cursor-pointer hover:bg-emerald-100 transition-colors" onClick={() => handleSort('amount')}>
                 <div className="flex items-center gap-2 justify-end">
                   Amount
                   {sortField === 'amount' && <ArrowUpDown className="w-4 h-4" />}
@@ -115,6 +116,7 @@ export default function ViewerTransactionTable({
                 <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.checkNumber || '-'}</td>
                 <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.dvNumber}</td>
                 <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.accountCode}</td>
+                <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.responsibilityCenter || '-'}</td>
                 <td className="px-4 py-3 text-sm text-gray-900 max-w-xs truncate">{tx.payee}</td>
                 <td className="px-4 py-3 text-sm text-gray-900 max-w-xs truncate">
                   {tx.particulars}
