@@ -40,6 +40,8 @@ export default function EntryDashboard() {
   const [selectedBankName, setSelectedBankName] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedFund, setSelectedFund] = useState<string>('')
+  const [selectedPlace, setSelectedPlace] = useState<string>('')
+  const [places, setPlaces] = useState<string[]>([])
   const router = useRouter()
 
   const fundOptions = [
@@ -47,7 +49,6 @@ export default function EntryDashboard() {
     'Development Fund',
     'Trust Fund',
     'Hospital Fund',
-    'MOPH'
   ]
 
   useEffect(() => {
@@ -80,6 +81,7 @@ export default function EntryDashboard() {
         setAllTransactions(data)
         setTransactions(data)
         extractBankNames(data)
+        extractPlaces(data)
       }
     } catch (error) {
       console.error('Error fetching transactions:', error)
@@ -89,6 +91,17 @@ export default function EntryDashboard() {
   const extractBankNames = (txs: Transaction[]) => {
     const names = Array.from(new Set(txs.map(tx => tx.bankName).filter(Boolean)))
     setBankNames(names.sort())
+  }
+
+  const extractPlaces = (txs: Transaction[]) => {
+    const regularFunds = ['General Fund', 'Development Fund', 'Trust Fund', 'Hospital Fund']
+    const placeList = Array.from(new Set(
+      txs
+        .map(tx => tx.fund)
+        .filter(Boolean)
+        .filter(fund => !regularFunds.includes(fund))
+    ))
+    setPlaces(placeList.sort())
   }
 
   const applyFilters = () => {
@@ -108,6 +121,10 @@ export default function EntryDashboard() {
       filtered = filtered.filter(tx => tx.fund === selectedFund)
     }
 
+    if (selectedPlace) {
+      filtered = filtered.filter(tx => tx.fund === selectedPlace)
+    }
+
     setTransactions(filtered)
   }
 
@@ -115,7 +132,7 @@ export default function EntryDashboard() {
     if (allTransactions.length > 0) {
       applyFilters()
     }
-  }, [selectedBankName, selectedDate, selectedFund, allTransactions])
+  }, [selectedBankName, selectedDate, selectedFund, selectedPlace, allTransactions])
 
   const handleLogout = () => {
     localStorage.removeItem('user')
@@ -198,7 +215,7 @@ export default function EntryDashboard() {
             <CardTitle className="text-lg">Filters</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <Label htmlFor="bank-filter" className="mb-2 block">Bank Name</Label>
                 <select
@@ -237,13 +254,28 @@ export default function EntryDashboard() {
                   ))}
                 </select>
               </div>
+              <div>
+                <Label htmlFor="place-filter" className="mb-2 block">MOPH</Label>
+                <select
+                  id="place-filter"
+                  value={selectedPlace}
+                  onChange={(e) => setSelectedPlace(e.target.value)}
+                  className="w-full rounded-lg border border-emerald-200 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                >
+                  <option value="">All Locations</option>
+                  {places.map(place => (
+                    <option key={place} value={place}>{place}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-            {(selectedBankName || selectedDate || selectedFund) && (
+            {(selectedBankName || selectedDate || selectedFund || selectedPlace) && (
               <Button
                 onClick={() => {
                   setSelectedBankName('')
                   setSelectedDate('')
                   setSelectedFund('')
+                  setSelectedPlace('')
                 }}
                 variant="outline"
                 className="mt-4 text-emerald-600 border-emerald-300 hover:bg-emerald-50"
