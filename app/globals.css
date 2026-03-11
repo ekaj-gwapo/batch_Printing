@@ -125,46 +125,58 @@
 }
 
 @media print {
-  body {
-    @apply bg-white;
+  body,
+  html {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   
-  /* Hide all elements by default when printing */
-  * {
+  /* Hide dashboard UI elements */
+  .print\:hidden {
     display: none !important;
   }
   
-  /* Show only the print report container and its contents */
-  [data-print-report],
-  [data-print-report] * {
+  /* Show print report */
+  [data-print-report] {
     display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
     visibility: visible !important;
   }
   
-  /* Ensure tables display correctly */
-  [data-print-report] table,
-  [data-print-report] table * {
-    display: table !important;
+  /* Ensure all print report children are visible */
+  [data-print-report] * {
+    visibility: visible !important;
+    background: white !important;
   }
   
-  [data-print-report] table thead {
-    display: table-header-group !important;
+  /* Proper table styling */
+  [data-print-report] table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 1rem 0 !important;
   }
   
-  [data-print-report] table tbody {
+  [data-print-report] thead,
+  [data-print-report] tbody,
+  [data-print-report] tfoot {
     display: table-row-group !important;
   }
   
-  [data-print-report] table tbody tr {
+  [data-print-report] tr {
     display: table-row !important;
+    break-inside: avoid !important;
   }
   
-  [data-print-report] table tbody tr td,
-  [data-print-report] table tbody tr th {
+  [data-print-report] td,
+  [data-print-report] th {
     display: table-cell !important;
-  }
-  
-  [data-print-report] table tfoot {
-    display: table-footer-group !important;
+    border: 1px solid #000 !important;
+    padding: 0.25rem !important;
   }
 }
