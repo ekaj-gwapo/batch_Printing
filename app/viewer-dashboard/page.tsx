@@ -373,8 +373,8 @@ export default function ViewerDashboard() {
           entryUserEmail={selectedEntryUserEmail}
           logo={null}
           batchId={batchId || undefined}
-          fund={selectedFund}
-          mophLocation={selectedPlace}
+          fund={selectedFund || selectedPlace || 'GENERAL FUND'}
+          bankName={selectedBankName}
         />
       </div>
     </div>
