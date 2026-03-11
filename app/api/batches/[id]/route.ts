@@ -4,12 +4,12 @@ import { NextRequest, NextResponse } from 'next/server'
 // GET batch details with transactions
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await initDb()
     const db = await getDb()
-    const batchId = params.id
+    const { id: batchId } = await params
 
     // Get batch metadata
     const batch = await db.get(
@@ -52,12 +52,12 @@ export async function GET(
 // POST restore transactions from batch
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await initDb()
     const db = await getDb()
-    const batchId = params.id
+    const { id: batchId } = await params
     const body = await request.json()
 
     const { transactionIds } = body
