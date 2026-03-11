@@ -39,6 +39,7 @@ export default function EntryDashboard() {
   const [bankNames, setBankNames] = useState<string[]>([])
   const [selectedBankName, setSelectedBankName] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<string>('')
+  const [selectedFund, setSelectedFund] = useState<string>('')
   const [selectedPlace, setSelectedPlace] = useState<string>('')
   const [places, setPlaces] = useState<string[]>([])
   const router = useRouter()
@@ -116,6 +117,10 @@ export default function EntryDashboard() {
       )
     }
 
+    if (selectedFund) {
+      filtered = filtered.filter(tx => tx.fund === selectedFund)
+    }
+
     if (selectedPlace) {
       filtered = filtered.filter(tx => tx.fund === selectedPlace)
     }
@@ -127,7 +132,7 @@ export default function EntryDashboard() {
     if (allTransactions.length > 0) {
       applyFilters()
     }
-  }, [selectedBankName, selectedDate, selectedPlace, allTransactions])
+  }, [selectedBankName, selectedDate, selectedFund, selectedPlace, allTransactions])
 
   const handleLogout = () => {
     localStorage.removeItem('user')
@@ -210,7 +215,7 @@ export default function EntryDashboard() {
             <CardTitle className="text-lg">Filters</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <Label htmlFor="bank-filter" className="mb-2 block">Bank Name</Label>
                 <select
@@ -236,6 +241,20 @@ export default function EntryDashboard() {
                 />
               </div>
               <div>
+                <Label htmlFor="fund-filter" className="mb-2 block">Fund</Label>
+                <select
+                  id="fund-filter"
+                  value={selectedFund}
+                  onChange={(e) => setSelectedFund(e.target.value)}
+                  className="w-full rounded-lg border border-emerald-200 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                >
+                  <option value="">All Funds</option>
+                  {fundOptions.map(option => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
                 <Label htmlFor="place-filter" className="mb-2 block">Place</Label>
                 <select
                   id="place-filter"
@@ -250,11 +269,12 @@ export default function EntryDashboard() {
                 </select>
               </div>
             </div>
-            {(selectedBankName || selectedDate || selectedPlace) && (
+            {(selectedBankName || selectedDate || selectedFund || selectedPlace) && (
               <Button
                 onClick={() => {
                   setSelectedBankName('')
                   setSelectedDate('')
+                  setSelectedFund('')
                   setSelectedPlace('')
                 }}
                 variant="outline"
