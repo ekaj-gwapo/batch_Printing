@@ -39,7 +39,7 @@ export async function GET(
       batchTransactionId: bt.id,
     }))
 
-    return NextResponse.json(transactions)
+    return NextResponse.json({ transactions })
   } catch (error) {
     console.error('Error fetching batch details:', error)
     return NextResponse.json(
