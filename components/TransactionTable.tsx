@@ -270,6 +270,15 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                   />
                 </div>
                 <div>
+                  <label className="text-xs font-semibold text-emerald-600 uppercase">Check Number</label>
+                  <input
+                    type="text"
+                    value={(editFormData as any).checkNumber || ''}
+                    onChange={(e) => handleEditChange('checkNumber' as any, e.target.value)}
+                    className="w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
+                  />
+                </div>
+                <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">Control Number</label>
                   <input
                     type="text"
@@ -341,12 +350,12 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-emerald-600 uppercase">Remarks</label>
-                  <textarea
-                    value={editFormData.remarks || ''}
-                    onChange={(e) => handleEditChange('remarks', e.target.value)}
+                  <label className="text-xs font-semibold text-emerald-600 uppercase">Responsibility Center</label>
+                  <input
+                    type="text"
+                    value={(editFormData as any).responsibilityCenter || ''}
+                    onChange={(e) => handleEditChange('responsibilityCenter' as any, e.target.value)}
                     className="w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
-                    rows={3}
                   />
                 </div>
               </>
@@ -371,6 +380,10 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                 <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">DV Number</label>
                   <p className="text-sm text-gray-900">{selectedTransaction.dvNumber}</p>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-emerald-600 uppercase">Check Number</label>
+                  <p className="text-sm text-gray-900">{selectedTransaction.checkNumber || '-'}</p>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">Control Number</label>
@@ -401,6 +414,10 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                 <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">Account Code</label>
                   <p className="text-sm text-gray-900">{selectedTransaction.accountCode}</p>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-emerald-600 uppercase">Responsibility Center</label>
+                  <p className="text-sm text-gray-900">{(selectedTransaction as any).responsibilityCenter || '-'}</p>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">Remarks</label>
