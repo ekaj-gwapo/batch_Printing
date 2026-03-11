@@ -12,6 +12,7 @@ type Transaction = {
   particulars: string
   amount: number
   date: string
+  checkNumber?: string
   controlNumber: string
   accountCode: string
   debit: number
@@ -20,13 +21,14 @@ type Transaction = {
   createdAt: string
   userId: string
   fund: string
+  responsibilityCenter?: string
 }
 
 type ViewerTransactionTableProps = {
   transactions: Transaction[]
 }
 
-type SortField = 'date' | 'bankName' | 'payee' | 'dvNumber' | 'controlNumber' | 'particulars' | 'amount' | 'accountCode' | 'fund'
+type SortField = 'date' | 'checkNumber' | 'dvNumber' | 'accountCode' | 'payee' | 'particulars' | 'amount' | 'remarks' | 'bankName' | 'controlNumber' | 'fund'
 
 export default function ViewerTransactionTable({
   transactions,
@@ -85,29 +87,18 @@ export default function ViewerTransactionTable({
           <thead>
             <tr className="border-b border-emerald-100 bg-emerald-50 sticky top-0">
               <SortableHeader label="Date" field="date" />
-              <SortableHeader label="Bank Name" field="bankName" />
-              <SortableHeader label="Payee" field="payee" />
-              <th className="px-6 py-3 text-left text-sm font-semibold text-emerald-900">
-                Address
-              </th>
+              <SortableHeader label="Check No." field="checkNumber" />
               <SortableHeader label="DV #" field="dvNumber" />
-              <SortableHeader label="Control #" field="controlNumber" />
-              <SortableHeader label="Particulars" field="particulars" />
               <SortableHeader label="Account Code" field="accountCode" />
-              <SortableHeader label="Fund" field="fund" />
+              <SortableHeader label="Payee" field="payee" />
+              <SortableHeader label="Particulars" field="particulars" />
               <th className="px-6 py-3 text-right text-sm font-semibold text-emerald-900 cursor-pointer hover:bg-emerald-100 transition-colors" onClick={() => handleSort('amount')}>
                 <div className="flex items-center gap-2 justify-end">
                   Amount
                   {sortField === 'amount' && <ArrowUpDown className="w-4 h-4" />}
                 </div>
               </th>
-              <th className="px-6 py-3 text-right text-sm font-semibold text-emerald-900">Debit</th>
-              <th className="px-6 py-3 text-right text-sm font-semibold text-emerald-900">
-                Credit
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-emerald-900">
-                Remarks
-              </th>
+              <SortableHeader label="Remarks" field="remarks" />
             </tr>
           </thead>
           <tbody>
@@ -118,33 +109,20 @@ export default function ViewerTransactionTable({
                   idx % 2 === 0 ? 'bg-white' : 'bg-emerald-50/30'
                 }`}
               >
-                <td className="px-6 py-3 text-sm text-gray-900 font-medium">
+                <td className="px-4 py-3 text-sm text-gray-900 font-medium whitespace-nowrap">
                   {new Date(tx.date).toLocaleDateString()}
                 </td>
-                <td className="px-6 py-3 text-sm text-gray-900">{tx.bankName}</td>
-                <td className="px-6 py-3 text-sm text-gray-900">{tx.payee}</td>
-                <td className="px-6 py-3 text-sm text-gray-900 max-w-xs truncate">
-                  {tx.address}
-                </td>
-                <td className="px-6 py-3 text-sm text-gray-900 font-medium">{tx.dvNumber}</td>
-                <td className="px-6 py-3 text-sm text-gray-900 font-medium">
-                  {tx.controlNumber}
-                </td>
-                <td className="px-6 py-3 text-sm text-gray-900 max-w-xs truncate">
+                <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.checkNumber || '-'}</td>
+                <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.dvNumber}</td>
+                <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.accountCode}</td>
+                <td className="px-4 py-3 text-sm text-gray-900 max-w-xs truncate">{tx.payee}</td>
+                <td className="px-4 py-3 text-sm text-gray-900 max-w-xs truncate">
                   {tx.particulars}
                 </td>
-                <td className="px-6 py-3 text-sm text-gray-900 font-medium">{tx.accountCode}</td>
-                <td className="px-6 py-3 text-sm text-gray-900">{tx.fund}</td>
-                <td className="px-6 py-3 text-sm text-right text-gray-900 font-semibold">
+                <td className="px-4 py-3 text-sm text-right text-gray-900 font-semibold whitespace-nowrap">
                   ${tx.amount.toFixed(2)}
                 </td>
-                <td className="px-6 py-3 text-sm text-right text-gray-900">
-                  {tx.debit > 0 ? `$${tx.debit.toFixed(2)}` : '-'}
-                </td>
-                <td className="px-6 py-3 text-sm text-right text-gray-900">
-                  {tx.credit > 0 ? `$${tx.credit.toFixed(2)}` : '-'}
-                </td>
-                <td className="px-6 py-3 text-sm text-gray-600 max-w-xs truncate">{tx.remarks}</td>
+                <td className="px-4 py-3 text-sm text-gray-600 max-w-xs truncate">{tx.remarks}</td>
               </tr>
             ))}
           </tbody>

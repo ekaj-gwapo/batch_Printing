@@ -18,6 +18,7 @@ type Transaction = {
   particulars: string
   amount: number
   date: string
+  checkNumber?: string
   controlNumber: string
   accountCode: string
   debit: number
@@ -26,6 +27,7 @@ type Transaction = {
   createdAt: string
   userId: string
   fund: string
+  responsibilityCenter?: string
 }
 
 export default function ViewerDashboard() {
