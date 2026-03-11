@@ -7,6 +7,7 @@ import { ArrowLeft, RotateCcw, Check, X } from 'lucide-react'
 
 type Transaction = {
   id: string
+  batchTransactionId: string
   bankName: string
   payee: string
   address: string
@@ -84,7 +85,7 @@ export default function BatchDetails({
     if (selectedTransactions.size === transactions.length) {
       setSelectedTransactions(new Set())
     } else {
-      setSelectedTransactions(new Set(transactions.map((tx) => tx.id)))
+      setSelectedTransactions(new Set(transactions.map((tx) => tx.batchTransactionId)))
     }
   }
 
