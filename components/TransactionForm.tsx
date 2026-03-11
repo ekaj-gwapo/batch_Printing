@@ -29,6 +29,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
     remarks: '',
     fund: '',
     moph_location: '',
+    responsibility_center: '',
   })
 
   const fundOptions = [
@@ -84,6 +85,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         credit: parseFloat(formData.credit || '0'),
         remarks: formData.remarks,
         fund: selectedFund,
+        responsibilityCenter: formData.responsibility_center,
       })
 
       const response = await fetch(`/api/transactions?userId=${userId}`, {
@@ -112,6 +114,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         remarks: '',
         fund: '',
         moph_location: '',
+        responsibility_center: '',
       })
 
       onSuccess?.()
@@ -311,6 +314,17 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
           onChange={handleChange}
           placeholder="Enter any additional remarks"
           className="flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="responsibility_center">Responsibility Center</Label>
+        <Input
+          id="responsibility_center"
+          name="responsibility_center"
+          value={formData.responsibility_center}
+          onChange={handleChange}
+          placeholder="Enter responsibility center"
         />
       </div>
 
