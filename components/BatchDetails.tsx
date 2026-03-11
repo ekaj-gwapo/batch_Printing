@@ -107,9 +107,17 @@ export default function BatchDetails({
       if (!response.ok) throw new Error('Failed to restore transactions')
 
       const result = await response.json()
-      alert(
-        `Successfully restored ${result.restoredCount} transaction(s) to the main list`
-      )
+      
+      if (result.batchDeleted) {
+        alert(
+          `Successfully restored ${result.restoredCount} transaction(s). Batch deleted as it has no remaining transactions.`
+        )
+      } else {
+        alert(
+          `Successfully restored ${result.restoredCount} transaction(s) to the main list`
+        )
+      }
+      
       setSelectedTransactions(new Set())
       setRestoreConfirm(false)
       onRestoreSuccess()

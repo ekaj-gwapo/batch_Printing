@@ -69,11 +69,11 @@ export async function POST(
       )
     }
 
-    // Get the batch transactions data
+    // Get the batch transactions data using batch_transactions IDs
     const placeholders = transactionIds.map(() => '?').join(',')
     const batchTxs = await db.all(
-      `SELECT transactionData FROM batch_transactions 
-       WHERE batchId = ? AND transactionId IN (${placeholders})`,
+      `SELECT id, transactionData FROM batch_transactions 
+       WHERE batchId = ? AND id IN (${placeholders})`,
       [batchId, ...transactionIds]
     )
 
@@ -87,10 +87,10 @@ export async function POST(
     // Restore transactions back to main transactions table
     const restoredTransactions = []
     const batchTxIds = []
-    
+
     for (const batchTx of batchTxs) {
       const txData = JSON.parse(batchTx.transactionData)
-      
+
       // Re-insert the transaction
       await db.run(
         `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, controlNumber, accountCode, debit, credit, remarks, fund, createdAt)
@@ -116,15 +116,15 @@ export async function POST(
       )
 
       restoredTransactions.push(txData)
-      batchTxIds.push(txData.id)
+      batchTxIds.push(batchTx.id)
     }
 
-    // Remove restored transactions from batch_transactions table
+    // Remove restored transactions from batch_transactions table using batch_transactions IDs
     if (batchTxIds.length > 0) {
       const placeholders = batchTxIds.map(() => '?').join(',')
       await db.run(
-        `DELETE FROM batch_transactions WHERE batchId = ? AND transactionId IN (${placeholders})`,
-        [batchId, ...batchTxIds]
+        `DELETE FROM batch_transactions WHERE id IN (${placeholders})`,
+        [...batchTxIds]
       )
 
       // Update batch count and amount
