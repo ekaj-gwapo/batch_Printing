@@ -123,3 +123,48 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  body {
+    @apply bg-white;
+  }
+  
+  /* Hide all elements by default when printing */
+  * {
+    display: none !important;
+  }
+  
+  /* Show only the print report container and its contents */
+  [data-print-report],
+  [data-print-report] * {
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure tables display correctly */
+  [data-print-report] table,
+  [data-print-report] table * {
+    display: table !important;
+  }
+  
+  [data-print-report] table thead {
+    display: table-header-group !important;
+  }
+  
+  [data-print-report] table tbody {
+    display: table-row-group !important;
+  }
+  
+  [data-print-report] table tbody tr {
+    display: table-row !important;
+  }
+  
+  [data-print-report] table tbody tr td,
+  [data-print-report] table tbody tr th {
+    display: table-cell !important;
+  }
+  
+  [data-print-report] table tfoot {
+    display: table-footer-group !important;
+  }
+}
