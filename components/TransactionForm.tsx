@@ -39,7 +39,14 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
   ]
 
   const mophOptions = [
-    // MOPH locations will be added here
+    'Initao',
+    'Balingasag',
+    'Gingoog',
+    'Manticao',
+    'Talisayan',
+    'Claveria',
+    'Magsaysay',
+    'Alubijid',
   ]
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
