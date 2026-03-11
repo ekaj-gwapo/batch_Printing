@@ -43,40 +43,42 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
         const data = await response.json()
         
         // Extract filters from batches and parse metadata
-        const batchesWithMetadata = data.map((batch: Batch) => {
-          try {
-            const filters = JSON.parse(batch.appliedFilters || '{}')
-            
-            // Get the month from the user-selected date in filters, fallback to createdAt
-            let month = ''
-            if (filters.date) {
-              const filterDate = new Date(filters.date)
-              month = filterDate.toLocaleDateString('en-US', { month: 'long' })
-            } else {
-              const createdDate = new Date(batch.createdAt)
-              month = createdDate.toLocaleDateString('en-US', { month: 'long' })
+        const batchesWithMetadata = data
+          .filter((batch: Batch) => batch.transactionCount > 0) // Filter out empty batches
+          .map((batch: Batch) => {
+            try {
+              const filters = JSON.parse(batch.appliedFilters || '{}')
+              
+              // Get the month from the user-selected date in filters, fallback to createdAt
+              let month = ''
+              if (filters.date) {
+                const filterDate = new Date(filters.date)
+                month = filterDate.toLocaleDateString('en-US', { month: 'long' })
+              } else {
+                const createdDate = new Date(batch.createdAt)
+                month = createdDate.toLocaleDateString('en-US', { month: 'long' })
+              }
+              
+              // Get the primary fund and bank from arrays or single values
+              const funds = filters.funds || (filters.fund ? [filters.fund] : [])
+              const banks = filters.bankNames || (filters.bankName ? [filters.bankName] : [])
+              
+              return {
+                ...batch,
+                fund: Array.isArray(funds) ? funds[0] || 'General Fund' : funds || 'General Fund',
+                bankName: Array.isArray(banks) ? banks[0] || 'All Banks' : banks || 'All Banks',
+                month: month,
+              }
+            } catch (err) {
+              console.log('[v0] Error parsing filters:', err)
+              return {
+                ...batch,
+                fund: 'General Fund',
+                bankName: 'All Banks',
+                month: new Date(batch.createdAt).toLocaleDateString('en-US', { month: 'long' }),
+              }
             }
-            
-            // Get the primary fund and bank from arrays or single values
-            const funds = filters.funds || (filters.fund ? [filters.fund] : [])
-            const banks = filters.bankNames || (filters.bankName ? [filters.bankName] : [])
-            
-            return {
-              ...batch,
-              fund: Array.isArray(funds) ? funds[0] || 'General Fund' : funds || 'General Fund',
-              bankName: Array.isArray(banks) ? banks[0] || 'All Banks' : banks || 'All Banks',
-              month: month,
-            }
-          } catch (err) {
-            console.log('[v0] Error parsing filters:', err)
-            return {
-              ...batch,
-              fund: 'General Fund',
-              bankName: 'All Banks',
-              month: new Date(batch.createdAt).toLocaleDateString('en-US', { month: 'long' }),
-            }
-          }
-        })
+          })
         
         setBatches(batchesWithMetadata)
         

@@ -91,32 +91,44 @@ export async function POST(
     for (const batchTx of batchTxs) {
       const txData = JSON.parse(batchTx.transactionData)
 
-      // Re-insert the transaction - ignore if it already exists
-      await db.run(
-        `INSERT OR IGNORE INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, controlNumber, accountCode, debit, credit, remarks, fund, createdAt)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          txData.id,
-          txData.userId,
-          txData.bankName,
-          txData.payee,
-          txData.address,
-          txData.dvNumber,
-          txData.particulars,
-          txData.amount,
-          txData.date,
-          txData.controlNumber,
-          txData.accountCode,
-          txData.debit,
-          txData.credit,
-          txData.remarks,
-          txData.fund,
-          txData.createdAt,
-        ]
-      )
+      try {
+        // Delete first to ensure no duplicates
+        await db.run(
+          `DELETE FROM transactions WHERE id = ?`,
+          [txData.id]
+        )
 
-      restoredTransactions.push(txData)
-      batchTxIds.push(batchTx.id)
+        // Then re-insert the transaction
+        await db.run(
+          `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, controlNumber, accountCode, debit, credit, remarks, fund, createdAt)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            txData.id,
+            txData.userId,
+            txData.bankName,
+            txData.payee,
+            txData.address,
+            txData.dvNumber,
+            txData.particulars,
+            txData.amount,
+            txData.date,
+            txData.controlNumber,
+            txData.accountCode,
+            txData.debit,
+            txData.credit,
+            txData.remarks,
+            txData.fund,
+            txData.createdAt,
+          ]
+        )
+
+        restoredTransactions.push(txData)
+        batchTxIds.push(batchTx.id)
+      } catch (txError) {
+        console.error(`[v0] Error restoring transaction ${txData.id}:`, txError)
+        // Continue with other transactions even if one fails
+        continue
+      }
     }
 
     // Remove restored transactions from batch_transactions table using batch_transactions IDs
