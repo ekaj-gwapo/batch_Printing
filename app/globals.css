@@ -123,3 +123,34 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  @page {
+    margin: 0.5cm;
+    size: portrait;
+  }
+  body,
+  html {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .hide-on-print {
+    display: none !important;
+  }
+  
+  .show-on-print {
+    display: block !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+
+@media screen {
+  .show-on-print {
+    display: none !important;
+  }
+}

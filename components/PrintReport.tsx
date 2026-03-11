@@ -42,37 +42,39 @@ return (
 
 {/* HEADER */}
 
-<div className="text-center leading-tight mb-6">
-<p>Republic of the Philippines</p>
-<p className="font-bold">PROVINCIAL GOVERNMENT</p>
-<p className="font-bold">OFFICE OF THE PROVINCIAL TREASURER</p>
+<div className="flex flex-col items-center mb-6 relative">
+  <div className="flex items-center justify-center gap-4 w-full">
+    <img src="/logos/logo4.png" alt="Logo" className="w-16 h-16 object-contain" />
+    <div className="text-center leading-tight">
+      <p>Republic of the Philippines</p>
+      <p className="font-bold uppercase">PROVINCIAL GOVERNMENT OF MISAMIS ORIENTAL</p>
+      <p className="font-bold uppercase">OFFICE OF THE PROVINCIAL TREASURER</p>
+    </div>
+  </div>
 
-<p className="font-bold text-lg mt-3">
-REPORT OF CHECKS ISSUED
-</p>
-
+  <div className="text-center mt-6">
+    <p className="font-bold text-base leading-tight">REPORT OF</p>
+    <p className="font-bold text-base leading-tight">CHECKS ISSUED</p>
+    <p className="font-bold text-sm mt-1">{new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase()}</p>
+  </div>
 </div>
 
 {/* BANK INFO */}
 
-<div className="flex justify-between mb-4 text-sm">
-
-<div>
-
-<p><span className="font-semibold">Bank Name:</span> {bankName || "DEVELOPMENT BANK OF THE PHILIPPINES"}</p>
-
-<p><span className="font-semibold">Account No.:</span> {accountNumber || "___________"}</p>
-
-</div>
-
-<div className="text-right">
-
-<p><span className="font-semibold">Fund:</span> {fund || "GENERAL FUND"}</p>
-
-<p><span className="font-semibold">Month/Year:</span> {new Date().toLocaleDateString()}</p>
-
-</div>
-
+<div className="flex justify-between items-end mb-2 text-xs">
+  <div>
+    <div className="grid grid-cols-[80px_1fr] gap-2 items-end mb-1">
+      <p className="leading-tight text-gray-700">Bank<br/>Name:</p>
+      <p className="font-bold border-b border-black uppercase whitespace-nowrap">{bankName || "DEVELOPMENT BANK OF THE PHILIPPINES"}</p>
+    </div>
+    <div className="grid grid-cols-[80px_1fr] gap-2 items-end">
+      <p className="leading-tight text-gray-700">Account No.:</p>
+      <p className="font-bold border-b border-black uppercase whitespace-nowrap">{accountNumber || "-"}</p>
+    </div>
+  </div>
+  <div className="text-right mb-1">
+    <p>Fund: <span className="font-bold uppercase border-b border-black inline-block min-w-[150px] text-center">{fund || "GENERAL FUND"}</span></p>
+  </div>
 </div>
 
 {/* TABLE */}
@@ -80,29 +82,20 @@ REPORT OF CHECKS ISSUED
 <table className="w-full border border-black border-collapse">
 
 <thead>
-
-<tr className="bg-gray-100">
-
-<th className="border border-black p-1">Date</th>
-
-<th className="border border-black p-1">Check No.</th>
-
-<th className="border border-black p-1">DV No.</th>
-
-<th className="border border-black p-1">Account Code</th>
-
-<th className="border border-black p-1">Resp. Center</th>
-
-<th className="border border-black p-1">Name of Payee</th>
-
-<th className="border border-black p-1">Nature of Payment</th>
-
-<th className="border border-black p-1">Amount</th>
-
-<th className="border border-black p-1">Remarks</th>
-
-</tr>
-
+  <tr className="bg-gray-50 text-center">
+    <th className="border border-black p-1 font-normal" colSpan={2}>Check</th>
+    <th className="border border-black p-1 font-normal" rowSpan={2}>DV<br/>No.</th>
+    <th className="border border-black p-1 font-normal" rowSpan={2}>Account<br/>Code</th>
+    <th className="border border-black p-1 font-normal" rowSpan={2}>Resp.<br/>Center</th>
+    <th className="border border-black p-1 font-normal" rowSpan={2}>Name of<br/>Payee</th>
+    <th className="border border-black p-1 font-normal" rowSpan={2}>Nature of Payment</th>
+    <th className="border border-black p-1 font-normal" rowSpan={2}>Amount</th>
+    <th className="border border-black p-1 font-normal" rowSpan={2}>Remarks</th>
+  </tr>
+  <tr className="bg-gray-50 text-center">
+    <th className="border border-black p-1 font-normal">Date</th>
+    <th className="border border-black p-1 font-normal">No.</th>
+  </tr>
 </thead>
 
 <tbody>

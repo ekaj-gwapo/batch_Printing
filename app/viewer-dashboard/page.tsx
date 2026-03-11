@@ -204,13 +204,12 @@ export default function ViewerDashboard() {
       const msg = `Batch created successfully! ID: ${batch.id.slice(0, 8)}`
       alert(msg)
 
-      // Open print dialog
-      setTimeout(() => {
+      // Open print dialog and ONLY refresh state after a delay or dialog close
+      setTimeout(async () => {
         window.print()
+        // Refresh transactions to remove printed ones AFTER printing
+        await fetchTransactions(selectedEntryUser)
       }, 500)
-
-      // Refresh transactions to remove printed ones
-      await fetchTransactions(selectedEntryUser)
     } catch (error) {
       console.error('Error creating batch:', error)
       alert('Failed to create batch. Please try again.')
@@ -366,7 +365,17 @@ export default function ViewerDashboard() {
       </div>
 
       {/* Print Report - Visible only on Print */}
-      
+      <div className="hidden print:block w-full bg-white relative z-50">
+        <PrintReport
+          ref={printRef}
+          transactions={transactions}
+          logo={null}
+          entryUserEmail={selectedEntryUserEmail}
+          batchId={batchId || undefined}
+          fund={selectedFund}
+          bankName={selectedBankName}
+        />
+      </div>
     </div>
   )
 }
