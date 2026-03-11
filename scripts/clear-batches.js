@@ -11,17 +11,14 @@ async function clearBatches() {
 
     console.log('Connected to database...');
 
-    // Delete all batch transactions first (due to foreign key)
-    const batchTxResult = await db.run('DELETE FROM batch_transactions');
-    console.log(`Deleted ${batchTxResult.changes} batch transaction records`);
-
-    // Delete all batches
-    const batchResult = await db.run('DELETE FROM transaction_batches');
-    console.log(`Deleted ${batchResult.changes} batch records`);
+    // Delete all batches from transaction_batches table
+    const result = await db.run('DELETE FROM transaction_batches');
+    console.log(`✓ Deleted ${result.changes} batch records`);
 
     // Verify transactions are still there
     const txCount = await db.get('SELECT COUNT(*) as count FROM transactions');
     console.log(`✓ Success! Your transactions are preserved. Transaction count: ${txCount.count}`);
+    console.log('Next batch created will be numbered 01');
 
     await db.close();
   } catch (error) {
