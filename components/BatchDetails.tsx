@@ -96,10 +96,6 @@ export default function BatchDetails({
 
     try {
       setIsRestoring(true)
-      const txIds = Array.from(selectedTransactions)
-      console.log('[v0] Batch ID:', batch.id)
-      console.log('[v0] Transaction IDs to restore:', txIds)
-      
       const response = await fetch(`/api/batches/${batch.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -309,7 +305,7 @@ export default function BatchDetails({
               <tbody>
                 {transactions.map((tx, idx) => (
                   <tr
-                    key={tx.id}
+                    key={tx.batchTransactionId}
                     className={`border-b border-emerald-100 hover:bg-emerald-50 transition-colors ${
                       idx % 2 === 0 ? 'bg-white' : 'bg-emerald-50/30'
                     }`}
@@ -317,8 +313,8 @@ export default function BatchDetails({
                     <td className="px-4 py-3">
                       <input
                         type="checkbox"
-                        checked={selectedTransactions.has(tx.id)}
-                        onChange={() => handleSelectTransaction(tx.id)}
+                        checked={selectedTransactions.has(tx.batchTransactionId)}
+                        onChange={() => handleSelectTransaction(tx.batchTransactionId)}
                         className="rounded border-emerald-300 text-emerald-600"
                       />
                     </td>
