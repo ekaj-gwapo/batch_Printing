@@ -91,9 +91,9 @@ export async function POST(
     for (const batchTx of batchTxs) {
       const txData = JSON.parse(batchTx.transactionData)
 
-      // Re-insert the transaction
+      // Re-insert the transaction - ignore if it already exists
       await db.run(
-        `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, controlNumber, accountCode, debit, credit, remarks, fund, createdAt)
+        `INSERT OR IGNORE INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, controlNumber, accountCode, debit, credit, remarks, fund, createdAt)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           txData.id,
@@ -120,6 +120,8 @@ export async function POST(
     }
 
     // Remove restored transactions from batch_transactions table using batch_transactions IDs
+    let batchWasDeleted = false
+    
     if (batchTxIds.length > 0) {
       const placeholders = batchTxIds.map(() => '?').join(',')
       await db.run(
@@ -140,6 +142,7 @@ export async function POST(
           `DELETE FROM transaction_batches WHERE id = ?`,
           [batchId]
         )
+        batchWasDeleted = true
       } else {
         await db.run(
           `UPDATE transaction_batches SET transactionCount = ?, totalAmount = ? WHERE id = ?`,
@@ -152,7 +155,7 @@ export async function POST(
       success: true,
       restoredCount: restoredTransactions.length,
       transactions: restoredTransactions,
-      batchDeleted: batchId,
+      batchDeleted: batchWasDeleted,
     })
   } catch (error) {
     console.error('Error restoring transactions:', error)

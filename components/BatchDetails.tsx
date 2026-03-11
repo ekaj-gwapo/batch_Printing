@@ -112,15 +112,18 @@ export default function BatchDetails({
         alert(
           `Successfully restored ${result.restoredCount} transaction(s). Batch deleted as it has no remaining transactions.`
         )
+        // Go back to batches list since this batch was deleted
+        setTimeout(() => {
+          onBack()
+        }, 300)
       } else {
         alert(
           `Successfully restored ${result.restoredCount} transaction(s) to the main list`
         )
+        setSelectedTransactions(new Set())
+        setRestoreConfirm(false)
+        onRestoreSuccess()
       }
-      
-      setSelectedTransactions(new Set())
-      setRestoreConfirm(false)
-      onRestoreSuccess()
     } catch (error) {
       console.error('Error restoring transactions:', error)
       alert('Failed to restore transactions. Please try again.')
