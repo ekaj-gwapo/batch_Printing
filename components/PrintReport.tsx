@@ -17,6 +17,7 @@ type Transaction = {
   credit: number
   remarks: string
   createdAt: string
+  responsibilityCenter?: string
 }
 
 interface PrintReportProps {
@@ -100,6 +101,7 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
               <th className="text-left py-3 px-2 font-bold">Payee</th>
               <th className="text-left py-3 px-2 font-bold">Account Code</th>
               <th className="text-left py-3 px-2 font-bold">Nature of Payment</th>
+              <th className="text-left py-3 px-2 font-bold">Responsibility Center</th>
               <th className="text-right py-3 px-2 font-bold">Amount</th>
               <th className="text-right py-3 px-2 font-bold">Debit</th>
               <th className="text-right py-3 px-2 font-bold">Credit</th>
@@ -116,6 +118,7 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
                 <td className="py-2 px-2">{transaction.payee}</td>
                 <td className="py-2 px-2">{transaction.accountCode}</td>
                 <td className="py-2 px-2">{transaction.particulars}</td>
+                <td className="py-2 px-2">{transaction.responsibilityCenter || '-'}</td>
                 <td className="py-2 px-2 text-right font-semibold">
                   {formatCurrency(transaction.amount)}
                 </td>
@@ -131,7 +134,7 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
           </tbody>
           <tfoot>
             <tr className="border-t-2 border-gray-800 font-bold">
-              <td colSpan={7} className="py-3 px-2 text-right">
+              <td colSpan={8} className="py-3 px-2 text-right">
                 TOTAL:
               </td>
               <td className="py-3 px-2 text-right border-t-2 border-gray-800">

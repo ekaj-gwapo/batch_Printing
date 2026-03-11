@@ -20,6 +20,7 @@ type Transaction = {
   remarks: string
   createdAt: string
   fund: string
+  responsibilityCenter?: string
 }
 
 type TransactionTableProps = {
@@ -160,6 +161,7 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                 <SortableHeader label="Control #" field="controlNumber" />
                 <SortableHeader label="Particulars" field="particulars" />
                 <SortableHeader label="Fund" field="fund" />
+                <th className="px-6 py-3 text-sm font-semibold text-emerald-900">Responsibility Center</th>
                 <th className="px-6 py-3 text-right text-sm font-semibold text-emerald-900 cursor-pointer hover:bg-emerald-100 transition-colors" onClick={() => handleSort('amount')}>
                   <div className="flex items-center gap-2 justify-end">
                     Amount
@@ -190,6 +192,7 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.controlNumber}</td>
                   <td className="px-6 py-3 text-sm text-gray-900 max-w-xs truncate">{tx.particulars}</td>
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.fund}</td>
+                  <td className="px-6 py-3 text-sm text-gray-900">{tx.responsibilityCenter || '-'}</td>
                   <td className="px-6 py-3 text-sm text-right text-gray-900 font-medium">
                     ${tx.amount.toFixed(2)}
                   </td>
