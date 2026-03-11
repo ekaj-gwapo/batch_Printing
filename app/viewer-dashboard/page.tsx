@@ -365,8 +365,8 @@ export default function ViewerDashboard() {
         </div>
       </div>
 
-      {/* Print Report - Visible only on Print */}
-      <div data-print-report>
+      {/* Print Report - Hidden on Dashboard, Visible only on Print */}
+      <div data-print-report className="hidden">
         <PrintReport
           ref={printRef}
           transactions={transactions}

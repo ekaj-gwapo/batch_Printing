@@ -134,12 +134,12 @@
     height: 100% !important;
   }
   
-  /* Hide dashboard UI elements */
-  .print\:hidden {
+  /* Hide everything by default */
+  body > * {
     display: none !important;
   }
   
-  /* Show print report */
+  /* Show only print report */
   [data-print-report] {
     display: block !important;
     width: 100% !important;
@@ -149,14 +149,16 @@
     visibility: visible !important;
   }
   
-  /* Ensure all print report children are visible */
+  /* Show all children of print report */
   [data-print-report] * {
+    display: inherit !important;
     visibility: visible !important;
-    background: white !important;
+    background: inherit !important;
   }
   
   /* Proper table styling */
   [data-print-report] table {
+    display: table !important;
     width: 100% !important;
     border-collapse: collapse !important;
     margin: 1rem 0 !important;
