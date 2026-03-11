@@ -30,7 +30,7 @@ type TransactionTableProps = {
   onTransactionUpdated?: () => void
 }
 
-type SortField = 'date' | 'bankName' | 'payee' | 'dvNumber' | 'controlNumber' | 'particulars' | 'amount' | 'accountCode' | 'fund'
+type SortField = 'date' | 'checkNumber' | 'dvNumber' | 'accountCode' | 'payee' | 'particulars' | 'amount' | 'remarks' | 'bankName' | 'controlNumber' | 'fund'
 
 export default function TransactionTable({ transactions, onTransactionDeleted, onTransactionUpdated }: TransactionTableProps) {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null)
