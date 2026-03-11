@@ -54,7 +54,7 @@ export default function ViewerDashboard() {
     'Development Fund',
     'Trust Fund',
     'Hospital Fund',
-    'MOPH'
+    
   ]
 
   useEffect(() => {
@@ -366,17 +366,7 @@ export default function ViewerDashboard() {
       </div>
 
       {/* Print Report - Visible only on Print */}
-      <div className="hidden print:block">
-        <PrintReport
-          ref={printRef}
-          transactions={transactions}
-          entryUserEmail={selectedEntryUserEmail}
-          logo={null}
-          batchId={batchId || undefined}
-          fund={selectedFund}
-          mophLocation={selectedPlace}
-        />
-      </div>
+      
     </div>
   )
 }

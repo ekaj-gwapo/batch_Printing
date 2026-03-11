@@ -103,8 +103,8 @@ export async function POST(
 
         // Then re-insert the transaction
         await db.run(
-          `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, controlNumber, accountCode, debit, credit, remarks, fund, createdAt)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, checkNumber, controlNumber, accountCode, debit, credit, remarks, fund, responsibilityCenter, createdAt)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             txData.id,
             txData.userId,
@@ -115,12 +115,14 @@ export async function POST(
             txData.particulars,
             txData.amount,
             txData.date,
+            txData.checkNumber,
             txData.controlNumber,
             txData.accountCode,
             txData.debit,
             txData.credit,
             txData.remarks,
             txData.fund,
+            txData.responsibilityCenter,
             txData.createdAt,
           ]
         )

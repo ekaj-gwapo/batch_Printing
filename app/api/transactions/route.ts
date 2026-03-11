@@ -176,7 +176,7 @@ export async function PUT(request: NextRequest) {
     }
 
     await db.run(
-      `UPDATE transactions SET bankName = ?, payee = ?, address = ?, dvNumber = ?, particulars = ?, amount = ?, date = ?, controlNumber = ?, accountCode = ?, debit = ?, credit = ?, remarks = ?, fund = ? WHERE id = ?`,
+      `UPDATE transactions SET bankName = ?, payee = ?, address = ?, dvNumber = ?, particulars = ?, amount = ?, date = ?, checkNumber = ?, controlNumber = ?, accountCode = ?, debit = ?, credit = ?, remarks = ?, fund = ?, responsibilityCenter = ? WHERE id = ?`,
       [
         body.bankName.trim(),
         body.payee.trim(),
@@ -185,12 +185,14 @@ export async function PUT(request: NextRequest) {
         body.particulars.trim(),
         parseFloat(body.amount),
         body.date,
+        body.checkNumber ? body.checkNumber.trim() : '',
         body.controlNumber ? body.controlNumber.trim() : '',
         body.accountCode.trim(),
         parseFloat(body.debit || 0),
         parseFloat(body.credit || 0),
         body.remarks ? body.remarks.trim() : '',
         body.fund ? body.fund.trim() : 'General Fund',
+        body.responsibilityCenter ? body.responsibilityCenter.trim() : '',
         id
       ]
     )
