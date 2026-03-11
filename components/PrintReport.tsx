@@ -27,144 +27,239 @@ interface PrintReportProps {
   entryUserEmail: string
   batchId?: string
   fund?: string
-  mophLocation?: string
+  bankName?: string
+  accountNumber?: string
 }
 
 const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
-  ({ transactions, logo, entryUserEmail, batchId, fund, mophLocation }, ref) => {
-    const formatCurrency = (amount: number) => {
-      return new Intl.NumberFormat('en-PH', {
-        style: 'currency',
-        currency: 'PHP',
-      }).format(amount)
-    }
+({ transactions, logo, entryUserEmail, batchId, fund, bankName, accountNumber }, ref) => {
 
-    const formatDate = (dateString: string) => {
-      return new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    }
+const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0)
 
-    const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0)
-    const totalDebit = transactions.reduce((sum, t) => sum + t.debit, 0)
-    const totalCredit = transactions.reduce((sum, t) => sum + t.credit, 0)
+return (
 
-    return (
-      <div
-        ref={ref}
-        className="w-full bg-white p-6 font-serif print:p-4"
-        style={{ minHeight: '100vh' }}
-      >
-        {/* Header Section */}
-        <div className="grid grid-cols-12 gap-4 mb-8">
-          {/* Logo Area - Left */}
-          <div className="col-span-2">
-            <div className="w-32 h-32 border-2 border-gray-400 flex items-center justify-center bg-gray-50">
-              {logo ? (
-                <img
-                  src={logo}
-                  alt="Organization Logo"
-                  className="h-28 w-28 object-contain"
-                />
-              ) : (
-                <p className="text-xs text-gray-400 text-center">Logo Here</p>
-              )}
-            </div>
-          </div>
+<div ref={ref} className="w-full bg-white p-8 font-serif text-[12px]">
 
-          {/* Title and Info - Right */}
-          <div className="col-span-10">
-            <div className="text-center mb-4">
-              <h1 className="text-xs font-bold tracking-wide">REPUBLIC OF THE PHILIPPINES</h1>
-              <h2 className="text-sm font-bold tracking-wider">PROVINCIAL GOVERNMENT OF MISAMIS ORIENTAL</h2>
-            </div>
-            <div className="text-center mb-4 border-t border-b border-gray-800 py-2">
-              <h2 className="text-sm font-bold tracking-wider">REPORT OF CHECKS ISSUED</h2>
-              <p className="text-xs text-gray-700 mt-1">Fund: {fund || mophLocation || 'GENERAL FUND'}</p>
-            </div>
-            <div className="text-center">
-              <p className="text-xs text-gray-700"><span className="font-semibold">Month/Year:</span> {formatDate(new Date().toISOString())}</p>
-              <p className="text-xs text-gray-700 mt-1"><span className="font-semibold">Entry User:</span> {entryUserEmail}</p>
-              {batchId && (
-                <p className="text-xs text-gray-700 mt-1"><span className="font-semibold">Batch ID:</span> {batchId}</p>
-              )}
-            </div>
-          </div>
-        </div>
+{/* HEADER */}
 
-        {/* Transactions Table */}
-        <table className="w-full text-xs border-collapse mb-8" style={{ borderCollapse: 'collapse' }}>
-          <thead>
-            <tr className="border border-gray-800">
-              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Check Date</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Check No.</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-center">DV No.</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Account Code</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-left">Responsibility Center</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-left">Name of Payee</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-left">Nature of Payment</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Amount</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-left">Remarks</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((transaction, index) => (
-              <tr key={transaction.id} className="border border-gray-800">
-                <td className="border border-gray-800 py-2 px-2 text-center">{formatDate(transaction.date).substring(0, 10)}</td>
-                <td className="border border-gray-800 py-2 px-2 text-center">{transaction.checkNumber || '-'}</td>
-                <td className="border border-gray-800 py-2 px-2 text-center">{transaction.dvNumber}</td>
-                <td className="border border-gray-800 py-2 px-2 text-center">{transaction.accountCode}</td>
-                <td className="border border-gray-800 py-2 px-2">
-                  <div className="text-xs font-semibold">{transaction.responsibilityCenter || '-'}</div>
-                  <div className="text-xs">{transaction.payee}</div>
-                </td>
-                <td className="border border-gray-800 py-2 px-2 text-xs">{transaction.particulars}</td>
-                <td className="border border-gray-800 py-2 px-2 text-right text-xs font-semibold">
-                  {formatCurrency(transaction.amount)}
-                </td>
-                <td className="border border-gray-800 py-2 px-2 text-xs">{transaction.remarks || '-'}</td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr className="border border-gray-800 font-bold">
-              <td colSpan={6} className="border border-gray-800 py-2 px-2 text-right">
-                TOTAL:
-              </td>
-              <td className="border border-gray-800 py-2 px-2 text-right font-semibold">
-                {formatCurrency(totalAmount)}
-              </td>
-              <td className="border border-gray-800 py-2 px-2"></td>
-            </tr>
-          </tfoot>
-        </table>
+<div className="text-center leading-tight mb-6">
+<p>Republic of the Philippines</p>
+<p className="font-bold">PROVINCIAL GOVERNMENT</p>
+<p className="font-bold">OFFICE OF THE PROVINCIAL TREASURER</p>
 
-        {/* Footer Section */}
-        <div className="mt-8 pt-6 border-t border-gray-800">
-          <div className="grid grid-cols-3 gap-12 text-center text-xs">
-            <div>
-              <p className="h-12 border-b border-gray-800"></p>
-              <p className="mt-2 font-semibold">Prepared By</p>
-              <p className="text-xs text-gray-600">Entry User</p>
-            </div>
-            <div>
-              <p className="h-12 border-b border-gray-800"></p>
-              <p className="mt-2 font-semibold">Reviewed By</p>
-              <p className="text-xs text-gray-600">Checker</p>
-            </div>
-            <div>
-              <p className="h-12 border-b border-gray-800"></p>
-              <p className="mt-2 font-semibold">Approved By</p>
-              <p className="text-xs text-gray-600">Provincial Treasurer</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+<p className="font-bold text-lg mt-3">
+REPORT OF CHECKS ISSUED
+</p>
+
+</div>
+
+{/* BANK INFO */}
+
+<div className="flex justify-between mb-4 text-sm">
+
+<div>
+
+<p><span className="font-semibold">Bank Name:</span> {bankName || "DEVELOPMENT BANK OF THE PHILIPPINES"}</p>
+
+<p><span className="font-semibold">Account No.:</span> {accountNumber || "___________"}</p>
+
+</div>
+
+<div className="text-right">
+
+<p><span className="font-semibold">Fund:</span> {fund || "GENERAL FUND"}</p>
+
+<p><span className="font-semibold">Month/Year:</span> {new Date().toLocaleDateString()}</p>
+
+</div>
+
+</div>
+
+{/* TABLE */}
+
+<table className="w-full border border-black border-collapse">
+
+<thead>
+
+<tr className="bg-gray-100">
+
+<th className="border border-black p-1">Date</th>
+
+<th className="border border-black p-1">Check No.</th>
+
+<th className="border border-black p-1">DV No.</th>
+
+<th className="border border-black p-1">Account Code</th>
+
+<th className="border border-black p-1">Resp. Center</th>
+
+<th className="border border-black p-1">Name of Payee</th>
+
+<th className="border border-black p-1">Nature of Payment</th>
+
+<th className="border border-black p-1">Amount</th>
+
+<th className="border border-black p-1">Remarks</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{transactions.length > 0 ? (
+
+transactions.map((t) => (
+
+<tr key={t.id}>
+
+<td className="border border-black p-1 text-center">
+
+{new Date(t.date).toLocaleDateString()}
+
+</td>
+
+<td className="border border-black p-1 text-center">
+
+{t.checkNumber}
+
+</td>
+
+<td className="border border-black p-1 text-center">
+
+{t.dvNumber}
+
+</td>
+
+<td className="border border-black p-1 text-center">
+
+{t.accountCode}
+
+</td>
+
+<td className="border border-black p-1 text-center">
+
+{t.responsibilityCenter}
+
+</td>
+
+<td className="border border-black p-1">
+
+{t.payee}
+
+</td>
+
+<td className="border border-black p-1">
+
+{t.particulars}
+
+</td>
+
+<td className="border border-black p-1 text-right">
+
+{t.amount.toLocaleString(undefined,{minimumFractionDigits:2})}
+
+</td>
+
+<td className="border border-black p-1">
+
+{t.remarks}
+
+</td>
+
+</tr>
+
+))
+
+) : (
+
+<tr>
+
+<td colSpan={9} className="text-center p-3 border">
+
+No transactions to display
+
+</td>
+
+</tr>
+
+)}
+
+</tbody>
+
+<tfoot>
+
+<tr>
+
+<td colSpan={7} className="border border-black p-1 text-right font-bold">
+
+
+
+</td>
+
+<td className="border border-black p-1 text-right font-bold">
+
+{totalAmount.toLocaleString(undefined,{minimumFractionDigits:2})}
+
+</td>
+
+<td className="border border-black"></td>
+
+</tr>
+
+</tfoot>
+
+</table>
+
+{/* FOOTER */}
+
+<div className="grid grid-cols-3 gap-10 text-center mt-16">
+
+<div>
+
+<div className="border-b border-black h-10"></div>
+
+<p className="mt-2 font-semibold">Prepared By</p>
+
+<p>{entryUserEmail}</p>
+
+</div>
+
+<div>
+
+<div className="border-b border-black h-10"></div>
+
+<p className="mt-2 font-semibold">Reviewed By</p>
+
+<p>Checker</p>
+
+</div>
+
+<div>
+
+<div className="border-b border-black h-10"></div>
+
+<p className="mt-2 font-semibold">Approved By</p>
+
+<p>Provincial Treasurer</p>
+
+</div>
+
+</div>
+
+{/* BATCH INFO */}
+
+<div className="mt-10 text-xs text-gray-600">
+
+<p>Batch ID: {batchId}</p>
+
+</div>
+
+</div>
+
 )
+
+})
 
 PrintReport.displayName = 'PrintReport'
 

@@ -185,7 +185,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
           />
         </div>
         <div>
-          <Label htmlFor="check_number">Check No.</Label>
+          <Label htmlFor="check_number">Check No.*</Label>
           <Input
             id="check_number"
             name="check_number"
