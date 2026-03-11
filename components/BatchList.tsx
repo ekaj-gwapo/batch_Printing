@@ -31,8 +31,10 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
   const [selectedFund, setSelectedFund] = useState<string>('')
   const [selectedBank, setSelectedBank] = useState<string>('')
   const [selectedMonth, setSelectedMonth] = useState<string>('')
+  const [selectedPlace, setSelectedPlace] = useState<string>('')
   const [funds, setFunds] = useState<string[]>([])
   const [banks, setBanks] = useState<string[]>([])
+  const [places, setPlaces] = useState<string[]>([])
 
   useEffect(() => {
     const fetchBatches = async () => {
@@ -82,15 +84,19 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
         
         setBatches(batchesWithMetadata)
         
-        // Extract all unique funds and banks from all batches
+        // Extract all unique funds, banks, and places from all batches
         const allFunds = new Set<string>()
         const allBanks = new Set<string>()
+        const allPlaces = new Set<string>()
         
         batchesWithMetadata.forEach((batch: Batch) => {
           try {
             const filters = JSON.parse(batch.appliedFilters || '{}')
             if (filters.funds && Array.isArray(filters.funds)) {
-              filters.funds.forEach((f: string) => allFunds.add(f))
+              filters.funds.forEach((f: string) => {
+                allFunds.add(f)
+                allPlaces.add(f)
+              })
             }
             if (filters.bankNames && Array.isArray(filters.bankNames)) {
               filters.bankNames.forEach((b: string) => allBanks.add(b))
@@ -102,6 +108,7 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
         
         setFunds(Array.from(allFunds).sort())
         setBanks(Array.from(allBanks).sort())
+        setPlaces(Array.from(allPlaces).sort())
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred')
       } finally {
@@ -133,6 +140,7 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
     if (selectedFund && batch.fund !== selectedFund) return false
     if (selectedBank && batch.bankName !== selectedBank) return false
     if (selectedMonth && batch.month !== selectedMonth) return false
+    if (selectedPlace && batch.fund !== selectedPlace) return false
     return true
   })
 
@@ -223,12 +231,29 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
             </select>
           </div>
 
-          {(selectedFund || selectedBank || selectedMonth) && (
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-700">Place</label>
+            <select
+              value={selectedPlace}
+              onChange={(e) => setSelectedPlace(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+              <option value="">All Places</option>
+              {places.filter(p => p).map((place) => (
+                <option key={place} value={place}>
+                  {place}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {(selectedFund || selectedBank || selectedMonth || selectedPlace) && (
             <Button
               onClick={() => {
                 setSelectedFund('')
                 setSelectedBank('')
                 setSelectedMonth('')
+                setSelectedPlace('')
               }}
               variant="ghost"
               size="sm"
