@@ -96,15 +96,23 @@ export default function BatchDetails({
 
     try {
       setIsRestoring(true)
+      const txIds = Array.from(selectedTransactions)
+      console.log('[v0] Batch ID:', batch.id)
+      console.log('[v0] Transaction IDs to restore:', txIds)
+      
       const response = await fetch(`/api/batches/${batch.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          transactionIds: Array.from(selectedTransactions),
+          transactionIds: txIds,
         }),
       })
 
-      if (!response.ok) throw new Error('Failed to restore transactions')
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error('[v0] API Error response:', errorData)
+        throw new Error(errorData.error || 'Failed to restore transactions')
+      }
 
       const result = await response.json()
       
