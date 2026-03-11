@@ -206,12 +206,7 @@ export default function ViewerDashboard() {
 
       // Open print dialog
       setTimeout(() => {
-        const printWindow = window.open('', '', 'height=1000,width=1200')
-        if (printWindow && printRef.current) {
-          printWindow.document.write(printRef.current.outerHTML)
-          printWindow.document.close()
-          printWindow.print()
-        }
+        window.print()
       }, 500)
 
       // Refresh transactions to remove printed ones
@@ -236,9 +231,9 @@ export default function ViewerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-emerald-100 sticky top-0 z-40">
+    <div className="min-h-screen bg-gray-50 print:bg-white">
+      {/* Header - Hidden on Print */}
+      <div className="bg-white border-b border-emerald-100 sticky top-0 z-40 print:hidden">
         <div className="w-full px-6 py-4 flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-emerald-900">Viewer Dashboard</h1>
@@ -257,8 +252,8 @@ export default function ViewerDashboard() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="w-full px-6 py-8">
+      {/* Main Content - Hidden on Print */}
+      <div className="w-full px-6 py-8 print:hidden">
         {/* Filters */}
         <div className="bg-white rounded-lg p-6 mb-8 border border-emerald-100">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -370,14 +365,16 @@ export default function ViewerDashboard() {
         </div>
       </div>
 
-      {/* Hidden Print Report */}
-      <div className="hidden">
+      {/* Print Report - Visible only on Print */}
+      <div className="hidden print:block">
         <PrintReport
           ref={printRef}
           transactions={transactions}
           entryUserEmail={selectedEntryUserEmail}
           logo={null}
           batchId={batchId || undefined}
+          fund={selectedFund}
+          mophLocation={selectedPlace}
         />
       </div>
     </div>
