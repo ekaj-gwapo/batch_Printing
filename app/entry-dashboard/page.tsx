@@ -48,7 +48,6 @@ export default function EntryDashboard() {
     'Development Fund',
     'Trust Fund',
     'Hospital Fund',
-    'MOPH'
   ]
 
   useEffect(() => {

@@ -51,7 +51,6 @@ export default function ViewerDashboard() {
     'Development Fund',
     'Trust Fund',
     'Hospital Fund',
-    'MOPH'
   ]
 
   useEffect(() => {
