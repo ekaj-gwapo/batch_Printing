@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft, RotateCcw, Check, X } from 'lucide-react'
+import { ArrowLeft, RotateCcw, Check, X, Printer } from 'lucide-react'
+import PrintReport from './PrintReport'
 
 type Transaction = {
   id: string
@@ -45,6 +46,7 @@ export default function BatchDetails({
   onBack,
   onRestoreSuccess,
 }: BatchDetailsProps) {
+  const printRef = useRef<HTMLDivElement>(null)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedTransactions, setSelectedTransactions] = useState<Set<string>>(
@@ -122,6 +124,12 @@ export default function BatchDetails({
     }
   }
 
+  const handlePrint = () => {
+    setTimeout(() => {
+      window.print()
+    }, 500)
+  }
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-PH', {
       style: 'currency',
@@ -154,7 +162,7 @@ export default function BatchDetails({
     .reduce((sum, tx) => sum + tx.amount, 0)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 print:hidden">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -214,6 +222,14 @@ export default function BatchDetails({
         >
           <Check className="w-4 h-4 mr-2" />
           {selectedTransactions.size === transactions.length ? 'Deselect All' : 'Select All'}
+        </Button>
+        <Button
+          onClick={handlePrint}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white"
+          size="sm"
+        >
+          <Printer className="w-4 h-4 mr-2" />
+          Print Report
         </Button>
         {totalSelected > 0 && (
           <>
@@ -326,6 +342,18 @@ export default function BatchDetails({
           </div>
         </CardContent>
       </Card>
+
+      {/* Print Report - Visible only on Print */}
+      <div className="hidden print:block">
+        <PrintReport
+          ref={printRef}
+          transactions={transactions}
+          entryUserEmail={batch.entryUserId}
+          logo={null}
+          batchId={batch.id}
+          fund={batch.appliedFilters}
+        />
+      </div>
     </div>
   )
 }

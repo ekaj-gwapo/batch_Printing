@@ -344,7 +344,7 @@ export default function ViewerDashboard() {
             <h2 className="text-2xl font-bold text-gray-900">Transactions</h2>
             <div className="flex gap-2">
               <Button
-                onClick={() => router.push('/batch-management')}
+                onClick={() => router.push('/viewer-dashboard/batches')}
                 variant="outline"
                 className="border-emerald-300 text-emerald-600 hover:bg-emerald-50"
               >
