@@ -22,6 +22,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
     particulars: '',
     amount: '',
     date: '',
+    check_number: '',
     control_number: '',
     account_code: '',
     debit: '',
@@ -29,6 +30,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
     remarks: '',
     fund: '',
     moph_location: '',
+    responsibility_center: '',
   })
 
   const fundOptions = [
@@ -78,12 +80,14 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         particulars: formData.particulars,
         amount: parseFloat(formData.amount),
         date: formData.date,
+        checkNumber: formData.check_number,
         controlNumber: formData.control_number,
         accountCode: formData.account_code,
         debit: parseFloat(formData.debit || '0'),
         credit: parseFloat(formData.credit || '0'),
         remarks: formData.remarks,
         fund: selectedFund,
+        responsibilityCenter: formData.responsibility_center,
       })
 
       const response = await fetch(`/api/transactions?userId=${userId}`, {
@@ -105,6 +109,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         particulars: '',
         amount: '',
         date: '',
+        check_number: '',
         control_number: '',
         account_code: '',
         debit: '',
@@ -112,6 +117,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         remarks: '',
         fund: '',
         moph_location: '',
+        responsibility_center: '',
       })
 
       onSuccess?.()
@@ -167,7 +173,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <Label htmlFor="dv_number">DV Number</Label>
           <Input
@@ -176,6 +182,16 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
             value={formData.dv_number}
             onChange={handleChange}
             placeholder="Enter DV number"
+          />
+        </div>
+        <div>
+          <Label htmlFor="check_number">Check No.</Label>
+          <Input
+            id="check_number"
+            name="check_number"
+            value={formData.check_number}
+            onChange={handleChange}
+            placeholder="Enter check number"
           />
         </div>
         <div>
@@ -311,6 +327,17 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
           onChange={handleChange}
           placeholder="Enter any additional remarks"
           className="flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="responsibility_center">Responsibility Center</Label>
+        <Input
+          id="responsibility_center"
+          name="responsibility_center"
+          value={formData.responsibility_center}
+          onChange={handleChange}
+          placeholder="Enter responsibility center"
         />
       </div>
 

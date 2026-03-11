@@ -11,12 +11,14 @@ type Transaction = {
   particulars: string
   amount: number
   date: string
+  checkNumber?: string
   controlNumber: string
   accountCode: string
   debit: number
   credit: number
   remarks: string
   createdAt: string
+  responsibilityCenter?: string
 }
 
 interface PrintReportProps {
@@ -94,15 +96,13 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
           <thead>
             <tr className="border-b-2 border-gray-800">
               <th className="text-left py-3 px-2 font-bold">Check Date</th>
+              <th className="text-left py-3 px-2 font-bold">Check No.</th>
               <th className="text-left py-3 px-2 font-bold">DV No.</th>
-              <th className="text-left py-3 px-2 font-bold">Control No.</th>
-              <th className="text-left py-3 px-2 font-bold">Bank Name</th>
-              <th className="text-left py-3 px-2 font-bold">Payee</th>
               <th className="text-left py-3 px-2 font-bold">Account Code</th>
+              <th className="text-left py-3 px-2 font-bold">Responsibility Center</th>
+              <th className="text-left py-3 px-2 font-bold">Payee</th>
               <th className="text-left py-3 px-2 font-bold">Nature of Payment</th>
               <th className="text-right py-3 px-2 font-bold">Amount</th>
-              <th className="text-right py-3 px-2 font-bold">Debit</th>
-              <th className="text-right py-3 px-2 font-bold">Credit</th>
               <th className="text-left py-3 px-2 font-bold">Remarks</th>
             </tr>
           </thead>
@@ -110,20 +110,14 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
             {transactions.map((transaction, index) => (
               <tr key={transaction.id} className="border-b border-gray-300">
                 <td className="py-2 px-2">{formatDate(transaction.date)}</td>
+                <td className="py-2 px-2">{transaction.checkNumber || '-'}</td>
                 <td className="py-2 px-2">{transaction.dvNumber}</td>
-                <td className="py-2 px-2">{transaction.controlNumber}</td>
-                <td className="py-2 px-2">{transaction.bankName}</td>
-                <td className="py-2 px-2">{transaction.payee}</td>
                 <td className="py-2 px-2">{transaction.accountCode}</td>
+                <td className="py-2 px-2">{transaction.responsibilityCenter || '-'}</td>
+                <td className="py-2 px-2">{transaction.payee}</td>
                 <td className="py-2 px-2">{transaction.particulars}</td>
                 <td className="py-2 px-2 text-right font-semibold">
                   {formatCurrency(transaction.amount)}
-                </td>
-                <td className="py-2 px-2 text-right">
-                  {transaction.debit > 0 ? formatCurrency(transaction.debit) : '-'}
-                </td>
-                <td className="py-2 px-2 text-right">
-                  {transaction.credit > 0 ? formatCurrency(transaction.credit) : '-'}
                 </td>
                 <td className="py-2 px-2 text-xs">{transaction.remarks}</td>
               </tr>

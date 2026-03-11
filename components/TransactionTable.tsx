@@ -13,6 +13,7 @@ type Transaction = {
   particulars: string
   amount: number
   date: string
+  checkNumber?: string
   controlNumber: string
   accountCode: string
   debit: number
@@ -20,6 +21,7 @@ type Transaction = {
   remarks: string
   createdAt: string
   fund: string
+  responsibilityCenter?: string
 }
 
 type TransactionTableProps = {
@@ -28,7 +30,7 @@ type TransactionTableProps = {
   onTransactionUpdated?: () => void
 }
 
-type SortField = 'date' | 'bankName' | 'payee' | 'dvNumber' | 'controlNumber' | 'particulars' | 'amount' | 'accountCode' | 'fund'
+type SortField = 'date' | 'checkNumber' | 'dvNumber' | 'accountCode' | 'payee' | 'particulars' | 'amount' | 'remarks' | 'bankName' | 'controlNumber' | 'fund'
 
 export default function TransactionTable({ transactions, onTransactionDeleted, onTransactionUpdated }: TransactionTableProps) {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null)
@@ -154,20 +156,19 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
             <thead>
               <tr className="border-b border-emerald-100 bg-emerald-50 sticky top-0">
                 <SortableHeader label="Date" field="date" />
-                <SortableHeader label="Bank" field="bankName" />
-                <SortableHeader label="Payee" field="payee" />
+                <SortableHeader label="Check No." field="checkNumber" />
                 <SortableHeader label="DV #" field="dvNumber" />
-                <SortableHeader label="Control #" field="controlNumber" />
+                <SortableHeader label="Account Code" field="accountCode" />
+                <th className="px-6 py-3 text-sm font-semibold text-emerald-900">Responsibility Center</th>
+                <SortableHeader label="Payee" field="payee" />
                 <SortableHeader label="Particulars" field="particulars" />
-                <SortableHeader label="Fund" field="fund" />
                 <th className="px-6 py-3 text-right text-sm font-semibold text-emerald-900 cursor-pointer hover:bg-emerald-100 transition-colors" onClick={() => handleSort('amount')}>
                   <div className="flex items-center gap-2 justify-end">
                     Amount
                     {sortField === 'amount' && <ArrowUpDown className="w-4 h-4" />}
                   </div>
                 </th>
-                <th className="px-6 py-3 text-right text-sm font-semibold text-emerald-900">Debit</th>
-                <th className="px-6 py-3 text-right text-sm font-semibold text-emerald-900">Credit</th>
+                <SortableHeader label="Remarks" field="remarks" />
               </tr>
             </thead>
             <tbody>
@@ -184,21 +185,16 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                   }`}
                 >
                   <td className="px-6 py-3 text-sm text-gray-900">{new Date(tx.date).toLocaleDateString()}</td>
-                  <td className="px-6 py-3 text-sm text-gray-900">{tx.bankName}</td>
-                  <td className="px-6 py-3 text-sm text-gray-900">{tx.payee}</td>
+                  <td className="px-6 py-3 text-sm text-gray-900">{tx.checkNumber || '-'}</td>
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.dvNumber}</td>
-                  <td className="px-6 py-3 text-sm text-gray-900">{tx.controlNumber}</td>
+                  <td className="px-6 py-3 text-sm text-gray-900">{tx.accountCode}</td>
+                  <td className="px-6 py-3 text-sm text-gray-900">{tx.responsibilityCenter || '-'}</td>
+                  <td className="px-6 py-3 text-sm text-gray-900">{tx.payee}</td>
                   <td className="px-6 py-3 text-sm text-gray-900 max-w-xs truncate">{tx.particulars}</td>
-                  <td className="px-6 py-3 text-sm text-gray-900">{tx.fund}</td>
                   <td className="px-6 py-3 text-sm text-right text-gray-900 font-medium">
                     ${tx.amount.toFixed(2)}
                   </td>
-                  <td className="px-6 py-3 text-sm text-right text-gray-900">
-                    {tx.debit > 0 ? `$${tx.debit.toFixed(2)}` : '-'}
-                  </td>
-                  <td className="px-6 py-3 text-sm text-right text-gray-900">
-                    {tx.credit > 0 ? `$${tx.credit.toFixed(2)}` : '-'}
-                  </td>
+                  <td className="px-6 py-3 text-sm text-gray-900">{tx.remarks}</td>
                 </tr>
               ))}
             </tbody>

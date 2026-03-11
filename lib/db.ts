@@ -39,12 +39,14 @@ export async function initDb() {
       particulars TEXT,
       amount REAL NOT NULL,
       date DATETIME NOT NULL,
+      checkNumber TEXT,
       controlNumber TEXT,
       accountCode TEXT,
       debit REAL DEFAULT 0,
       credit REAL DEFAULT 0,
       remarks TEXT,
       fund TEXT DEFAULT 'General Fund',
+      responsibilityCenter TEXT,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
     );
@@ -85,6 +87,20 @@ export async function initDb() {
   // Add fund column if it doesn't exist (migration for existing databases)
   try {
     await db.run('ALTER TABLE transactions ADD COLUMN fund TEXT DEFAULT "General Fund"');
+  } catch (error) {
+    // Column already exists, ignore error
+  }
+
+  // Add responsibilityCenter column if it doesn't exist (migration for existing databases)
+  try {
+    await db.run('ALTER TABLE transactions ADD COLUMN responsibilityCenter TEXT');
+  } catch (error) {
+    // Column already exists, ignore error
+  }
+
+  // Add checkNumber column if it doesn't exist (migration for existing databases)
+  try {
+    await db.run('ALTER TABLE transactions ADD COLUMN checkNumber TEXT');
   } catch (error) {
     // Column already exists, ignore error
   }

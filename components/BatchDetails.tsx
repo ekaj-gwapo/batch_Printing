@@ -7,6 +7,7 @@ import { ArrowLeft, RotateCcw, Check, X } from 'lucide-react'
 
 type Transaction = {
   id: string
+  batchTransactionId: string
   bankName: string
   payee: string
   address: string
@@ -84,7 +85,7 @@ export default function BatchDetails({
     if (selectedTransactions.size === transactions.length) {
       setSelectedTransactions(new Set())
     } else {
-      setSelectedTransactions(new Set(transactions.map((tx) => tx.id)))
+      setSelectedTransactions(new Set(transactions.map((tx) => tx.batchTransactionId)))
     }
   }
 
@@ -96,42 +97,23 @@ export default function BatchDetails({
 
     try {
       setIsRestoring(true)
-      const txIds = Array.from(selectedTransactions)
-      console.log('[v0] Batch ID:', batch.id)
-      console.log('[v0] Transaction IDs to restore:', txIds)
-      
       const response = await fetch(`/api/batches/${batch.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          transactionIds: txIds,
+          transactionIds: Array.from(selectedTransactions),
         }),
       })
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        console.error('[v0] API Error response:', errorData)
-        throw new Error(errorData.error || 'Failed to restore transactions')
-      }
+      if (!response.ok) throw new Error('Failed to restore transactions')
 
       const result = await response.json()
-      
-      if (result.batchDeleted) {
-        alert(
-          `Successfully restored ${result.restoredCount} transaction(s). Batch deleted as it has no remaining transactions.`
-        )
-        // Go back to batches list since this batch was deleted
-        setTimeout(() => {
-          onBack()
-        }, 300)
-      } else {
-        alert(
-          `Successfully restored ${result.restoredCount} transaction(s) to the main list`
-        )
-        setSelectedTransactions(new Set())
-        setRestoreConfirm(false)
-        onRestoreSuccess()
-      }
+      alert(
+        `Successfully restored ${result.restoredCount} transaction(s) to the main list`
+      )
+      setSelectedTransactions(new Set())
+      setRestoreConfirm(false)
+      onRestoreSuccess()
     } catch (error) {
       console.error('Error restoring transactions:', error)
       alert('Failed to restore transactions. Please try again.')
@@ -168,7 +150,7 @@ export default function BatchDetails({
 
   const totalSelected = selectedTransactions.size
   const selectedAmount = transactions
-    .filter((tx) => selectedTransactions.has(tx.id))
+    .filter((tx) => selectedTransactions.has(tx.batchTransactionId))
     .reduce((sum, tx) => sum + tx.amount, 0)
 
   return (
@@ -317,8 +299,8 @@ export default function BatchDetails({
                     <td className="px-4 py-3">
                       <input
                         type="checkbox"
-                        checked={selectedTransactions.has(tx.id)}
-                        onChange={() => handleSelectTransaction(tx.id)}
+                        checked={selectedTransactions.has(tx.batchTransactionId)}
+                        onChange={() => handleSelectTransaction(tx.batchTransactionId)}
                         className="rounded border-emerald-300 text-emerald-600"
                       />
                     </td>
