@@ -93,48 +93,42 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
           </div>
         </div>
 
-        {/* Transactions Table */}
+        {/* Transactions Table - Banking Format */}
         <table className="w-full text-xs border-collapse mb-8" style={{ borderCollapse: 'collapse' }}>
           <thead>
-            <tr className="border border-gray-800">
-              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Check Date</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Check No.</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-center">DV No.</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Account Code</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-left">Responsibility Center/Name of Payee</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-left">Nature of Payment</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Amount</th>
-              <th className="border border-gray-800 py-2 px-2 font-bold text-left">Remarks</th>
+            <tr>
+              <th className="border border-gray-900 py-1 px-1 font-bold text-center text-xs h-8">Check Date</th>
+              <th className="border border-gray-900 py-1 px-1 font-bold text-center text-xs h-8">Check No.</th>
+              <th className="border border-gray-900 py-1 px-1 font-bold text-center text-xs h-8">DV No.</th>
+              <th className="border border-gray-900 py-1 px-1 font-bold text-center text-xs h-8">Account Code</th>
+              <th className="border border-gray-900 py-1 px-1 font-bold text-left text-xs h-8">Name of Payee</th>
+              <th className="border border-gray-900 py-1 px-1 font-bold text-left text-xs h-8">Nature of Payment</th>
+              <th className="border border-gray-900 py-1 px-1 font-bold text-center text-xs h-8">Amount</th>
             </tr>
           </thead>
           <tbody>
-            {transactions.map((transaction, index) => (
-              <tr key={transaction.id} className="border border-gray-800">
-                <td className="border border-gray-800 py-2 px-2 text-center">{formatDate(transaction.date).substring(0, 10)}</td>
-                <td className="border border-gray-800 py-2 px-2 text-center">{transaction.checkNumber || '-'}</td>
-                <td className="border border-gray-800 py-2 px-2 text-center">{transaction.dvNumber}</td>
-                <td className="border border-gray-800 py-2 px-2 text-center">{transaction.accountCode}</td>
-                <td className="border border-gray-800 py-2 px-2">
-                  <div className="text-xs font-semibold">{transaction.responsibilityCenter || '-'}</div>
-                  <div className="text-xs">{transaction.payee}</div>
-                </td>
-                <td className="border border-gray-800 py-2 px-2 text-xs">{transaction.particulars}</td>
-                <td className="border border-gray-800 py-2 px-2 text-right text-xs font-semibold">
-                  {formatCurrency(transaction.amount)}
-                </td>
-                <td className="border border-gray-800 py-2 px-2 text-xs">{transaction.remarks || '-'}</td>
+            {transactions.length > 0 ? (
+              transactions.map((transaction, index) => (
+                <tr key={transaction.id}>
+                  <td className="border border-gray-900 py-1 px-1 text-center text-xs">{new Date(transaction.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' })}</td>
+                  <td className="border border-gray-900 py-1 px-1 text-center text-xs">{transaction.checkNumber || ''}</td>
+                  <td className="border border-gray-900 py-1 px-1 text-center text-xs">{transaction.dvNumber || ''}</td>
+                  <td className="border border-gray-900 py-1 px-1 text-center text-xs">{transaction.accountCode || ''}</td>
+                  <td className="border border-gray-900 py-1 px-1 text-left text-xs">{transaction.payee}</td>
+                  <td className="border border-gray-900 py-1 px-1 text-left text-xs">{transaction.particulars}</td>
+                  <td className="border border-gray-900 py-1 px-1 text-right text-xs">{transaction.amount.toFixed(2)}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={7} className="border border-gray-900 py-2 px-2 text-center text-xs">No transactions to display</td>
               </tr>
-            ))}
+            )}
           </tbody>
           <tfoot>
-            <tr className="border border-gray-800 font-bold">
-              <td colSpan={6} className="border border-gray-800 py-2 px-2 text-right">
-                TOTAL:
-              </td>
-              <td className="border border-gray-800 py-2 px-2 text-right font-semibold">
-                {formatCurrency(totalAmount)}
-              </td>
-              <td className="border border-gray-800 py-2 px-2"></td>
+            <tr className="font-bold">
+              <td colSpan={6} className="border border-gray-900 py-1 px-1 text-right text-xs">TOTAL:</td>
+              <td className="border border-gray-900 py-1 px-1 text-right text-xs font-semibold">{totalAmount.toFixed(2)}</td>
             </tr>
           </tfoot>
         </table>
