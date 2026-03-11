@@ -87,11 +87,14 @@ export async function POST(
     // Restore transactions back to main transactions table
     const restoredTransactions = []
     const batchTxIds = []
+    const failedTransactions = []
 
     for (const batchTx of batchTxs) {
       const txData = JSON.parse(batchTx.transactionData)
 
       try {
+        console.log('[v0] Restoring transaction:', txData.id)
+        
         // Delete first to ensure no duplicates
         await db.run(
           `DELETE FROM transactions WHERE id = ?`,
@@ -122,13 +125,29 @@ export async function POST(
           ]
         )
 
+        console.log('[v0] Successfully restored transaction:', txData.id)
         restoredTransactions.push(txData)
         batchTxIds.push(batchTx.id)
-      } catch (txError) {
-        console.error(`[v0] Error restoring transaction ${txData.id}:`, txError)
+      } catch (txError: any) {
+        console.error(`[v0] Error restoring transaction ${txData.id}:`, txError.message)
+        failedTransactions.push({
+          id: txData.id,
+          error: txError.message
+        })
         // Continue with other transactions even if one fails
         continue
       }
+    }
+
+    // If no transactions were restored, return error
+    if (restoredTransactions.length === 0) {
+      return NextResponse.json(
+        { 
+          error: `Failed to restore transactions. Failed transactions: ${failedTransactions.map(t => t.id).join(', ')}`,
+          failedTransactions
+        },
+        { status: 400 }
+      )
     }
 
     // Remove restored transactions from batch_transactions table using batch_transactions IDs

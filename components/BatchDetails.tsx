@@ -104,7 +104,11 @@ export default function BatchDetails({
         }),
       })
 
-      if (!response.ok) throw new Error('Failed to restore transactions')
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error('[v0] API Error response:', errorData)
+        throw new Error(errorData.error || 'Failed to restore transactions')
+      }
 
       const result = await response.json()
       
