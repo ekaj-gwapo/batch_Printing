@@ -26,10 +26,12 @@ interface PrintReportProps {
   logo: string | null
   entryUserEmail: string
   batchId?: string
+  fund?: string
+  mophLocation?: string
 }
 
 const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
-  ({ transactions, logo, entryUserEmail, batchId }, ref) => {
+  ({ transactions, logo, entryUserEmail, batchId, fund, mophLocation }, ref) => {
     const formatCurrency = (amount: number) => {
       return new Intl.NumberFormat('en-PH', {
         style: 'currency',
@@ -79,7 +81,7 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
             </div>
             <div className="text-center mb-4 border-t border-b border-gray-800 py-2">
               <h2 className="text-sm font-bold tracking-wider">REPORT OF REMITTANCE OF PROVINCIAL TREASURER</h2>
-              <p className="text-xs text-gray-700 mt-1">Fund: GENERAL FUND</p>
+              <p className="text-xs text-gray-700 mt-1">Fund: {fund || mophLocation || 'GENERAL FUND'}</p>
             </div>
             <div className="text-center">
               <p className="text-xs text-gray-700"><span className="font-semibold">Month/Year:</span> {formatDate(new Date().toISOString())}</p>
