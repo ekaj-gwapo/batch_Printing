@@ -22,6 +22,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
     particulars: '',
     amount: '',
     date: '',
+    check_number: '',
     control_number: '',
     account_code: '',
     debit: '',
@@ -79,6 +80,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         particulars: formData.particulars,
         amount: parseFloat(formData.amount),
         date: formData.date,
+        checkNumber: formData.check_number,
         controlNumber: formData.control_number,
         accountCode: formData.account_code,
         debit: parseFloat(formData.debit || '0'),
@@ -107,6 +109,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         particulars: '',
         amount: '',
         date: '',
+        check_number: '',
         control_number: '',
         account_code: '',
         debit: '',
@@ -170,7 +173,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <Label htmlFor="dv_number">DV Number</Label>
           <Input
@@ -179,6 +182,16 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
             value={formData.dv_number}
             onChange={handleChange}
             placeholder="Enter DV number"
+          />
+        </div>
+        <div>
+          <Label htmlFor="check_number">Check No.</Label>
+          <Input
+            id="check_number"
+            name="check_number"
+            value={formData.check_number}
+            onChange={handleChange}
+            placeholder="Enter check number"
           />
         </div>
         <div>

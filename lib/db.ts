@@ -39,6 +39,7 @@ export async function initDb() {
       particulars TEXT,
       amount REAL NOT NULL,
       date DATETIME NOT NULL,
+      checkNumber TEXT,
       controlNumber TEXT,
       accountCode TEXT,
       debit REAL DEFAULT 0,
@@ -93,6 +94,13 @@ export async function initDb() {
   // Add responsibilityCenter column if it doesn't exist (migration for existing databases)
   try {
     await db.run('ALTER TABLE transactions ADD COLUMN responsibilityCenter TEXT');
+  } catch (error) {
+    // Column already exists, ignore error
+  }
+
+  // Add checkNumber column if it doesn't exist (migration for existing databases)
+  try {
+    await db.run('ALTER TABLE transactions ADD COLUMN checkNumber TEXT');
   } catch (error) {
     // Column already exists, ignore error
   }

@@ -87,8 +87,8 @@ export async function POST(request: NextRequest) {
     }
 
     await db.run(
-      `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, controlNumber, accountCode, debit, credit, remarks, fund, responsibilityCenter)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, checkNumber, controlNumber, accountCode, debit, credit, remarks, fund, responsibilityCenter)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id,
         userId,
@@ -99,6 +99,7 @@ export async function POST(request: NextRequest) {
         body.particulars.trim(),
         parseFloat(body.amount),
         body.date,
+        body.checkNumber ? body.checkNumber.trim() : '',
         body.controlNumber ? body.controlNumber.trim() : '',
         body.accountCode.trim(),
         parseFloat(body.debit || 0),
