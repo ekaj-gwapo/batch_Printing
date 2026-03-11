@@ -52,110 +52,108 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
     return (
       <div
         ref={ref}
-        className="w-full bg-white p-8 font-serif print:p-4"
+        className="w-full bg-white p-6 font-serif print:p-4"
         style={{ minHeight: '100vh' }}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8 pb-8 border-b-2 border-gray-800">
-          <div className="flex items-center gap-4">
-            {logo && (
-              <img
-                src={logo}
-                alt="Organization Logo"
-                className="h-16 w-16 object-contain"
-              />
-            )}
+        {/* Header Section */}
+        <div className="grid grid-cols-12 gap-4 mb-8">
+          {/* Logo Area - Left */}
+          <div className="col-span-2">
+            <div className="w-32 h-32 border-2 border-gray-400 flex items-center justify-center bg-gray-50">
+              {logo ? (
+                <img
+                  src={logo}
+                  alt="Organization Logo"
+                  className="h-28 w-28 object-contain"
+                />
+              ) : (
+                <p className="text-xs text-gray-400 text-center">Logo Here</p>
+              )}
+            </div>
           </div>
-          <div className="text-center flex-1">
-            <h1 className="text-2xl font-bold text-gray-900">
-              TRANSACTION REPORT
-            </h1>
-            <p className="text-sm text-gray-600 mt-2">
-              {formatDate(new Date().toISOString())}
-            </p>
-          </div>
-        </div>
 
-        {/* Entry User Info */}
-        <div className="mb-6">
-          <p className="text-sm text-gray-700">
-            <span className="font-semibold">Data Entry User:</span> {entryUserEmail}
-          </p>
-          <p className="text-sm text-gray-700">
-            <span className="font-semibold">Total Records:</span> {transactions.length}
-          </p>
-          {batchId && (
-            <p className="text-sm text-gray-700 mt-2 p-2 bg-gray-100 rounded font-mono">
-              <span className="font-semibold">Batch ID:</span> {batchId}
-            </p>
-          )}
+          {/* Title and Info - Right */}
+          <div className="col-span-10">
+            <div className="text-center mb-4">
+              <h1 className="text-xs font-bold tracking-wide">PROVINCIAL GOVERNMENT OF BULACAN</h1>
+            </div>
+            <div className="text-center mb-4 border-t border-b border-gray-800 py-2">
+              <h2 className="text-sm font-bold tracking-wider">REPORT OF REMITTANCE OF PROVINCIAL TREASURER</h2>
+              <p className="text-xs text-gray-700 mt-1">Fund: GENERAL FUND</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xs text-gray-700"><span className="font-semibold">Month/Year:</span> {formatDate(new Date().toISOString())}</p>
+              <p className="text-xs text-gray-700 mt-1"><span className="font-semibold">Entry User:</span> {entryUserEmail}</p>
+              {batchId && (
+                <p className="text-xs text-gray-700 mt-1"><span className="font-semibold">Batch ID:</span> {batchId}</p>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Transactions Table */}
-        <table className="w-full text-sm border-collapse mb-8">
+        <table className="w-full text-xs border-collapse mb-8" style={{ borderCollapse: 'collapse' }}>
           <thead>
-            <tr className="border-b-2 border-gray-800">
-              <th className="text-left py-3 px-2 font-bold">Check Date</th>
-              <th className="text-left py-3 px-2 font-bold">Check No.</th>
-              <th className="text-left py-3 px-2 font-bold">DV No.</th>
-              <th className="text-left py-3 px-2 font-bold">Account Code</th>
-              <th className="text-left py-3 px-2 font-bold">Responsibility Center</th>
-              <th className="text-left py-3 px-2 font-bold">Payee</th>
-              <th className="text-left py-3 px-2 font-bold">Nature of Payment</th>
-              <th className="text-right py-3 px-2 font-bold">Amount</th>
-              <th className="text-left py-3 px-2 font-bold">Remarks</th>
+            <tr className="border border-gray-800">
+              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Check Date</th>
+              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Check No.</th>
+              <th className="border border-gray-800 py-2 px-2 font-bold text-center">DV No.</th>
+              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Account Code</th>
+              <th className="border border-gray-800 py-2 px-2 font-bold text-left">Responsibility Center/Name of Payee</th>
+              <th className="border border-gray-800 py-2 px-2 font-bold text-left">Nature of Payment</th>
+              <th className="border border-gray-800 py-2 px-2 font-bold text-center">Amount</th>
+              <th className="border border-gray-800 py-2 px-2 font-bold text-left">Remarks</th>
             </tr>
           </thead>
           <tbody>
             {transactions.map((transaction, index) => (
-              <tr key={transaction.id} className="border-b border-gray-300">
-                <td className="py-2 px-2">{formatDate(transaction.date)}</td>
-                <td className="py-2 px-2">{transaction.checkNumber || '-'}</td>
-                <td className="py-2 px-2">{transaction.dvNumber}</td>
-                <td className="py-2 px-2">{transaction.accountCode}</td>
-                <td className="py-2 px-2">{transaction.responsibilityCenter || '-'}</td>
-                <td className="py-2 px-2">{transaction.payee}</td>
-                <td className="py-2 px-2">{transaction.particulars}</td>
-                <td className="py-2 px-2 text-right font-semibold">
+              <tr key={transaction.id} className="border border-gray-800">
+                <td className="border border-gray-800 py-2 px-2 text-center">{formatDate(transaction.date).substring(0, 10)}</td>
+                <td className="border border-gray-800 py-2 px-2 text-center">{transaction.checkNumber || '-'}</td>
+                <td className="border border-gray-800 py-2 px-2 text-center">{transaction.dvNumber}</td>
+                <td className="border border-gray-800 py-2 px-2 text-center">{transaction.accountCode}</td>
+                <td className="border border-gray-800 py-2 px-2">
+                  <div className="text-xs font-semibold">{transaction.responsibilityCenter || '-'}</div>
+                  <div className="text-xs">{transaction.payee}</div>
+                </td>
+                <td className="border border-gray-800 py-2 px-2 text-xs">{transaction.particulars}</td>
+                <td className="border border-gray-800 py-2 px-2 text-right text-xs font-semibold">
                   {formatCurrency(transaction.amount)}
                 </td>
-                <td className="py-2 px-2 text-xs">{transaction.remarks}</td>
+                <td className="border border-gray-800 py-2 px-2 text-xs">{transaction.remarks || '-'}</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
-            <tr className="border-t-2 border-gray-800 font-bold">
-              <td colSpan={7} className="py-3 px-2 text-right">
+            <tr className="border border-gray-800 font-bold">
+              <td colSpan={6} className="border border-gray-800 py-2 px-2 text-right">
                 TOTAL:
               </td>
-              <td className="py-3 px-2 text-right border-t-2 border-gray-800">
+              <td className="border border-gray-800 py-2 px-2 text-right font-semibold">
                 {formatCurrency(totalAmount)}
               </td>
-              <td className="py-3 px-2 text-right border-t-2 border-gray-800">
-                {formatCurrency(totalDebit)}
-              </td>
-              <td className="py-3 px-2 text-right border-t-2 border-gray-800">
-                {formatCurrency(totalCredit)}
-              </td>
-              <td className="py-3 px-2"></td>
+              <td className="border border-gray-800 py-2 px-2"></td>
             </tr>
           </tfoot>
         </table>
 
-        {/* Footer */}
-        <div className="mt-12 pt-8 border-t border-gray-300">
-          <div className="grid grid-cols-3 gap-8 text-center">
+        {/* Footer Section */}
+        <div className="mt-8 pt-6 border-t border-gray-800">
+          <div className="grid grid-cols-3 gap-12 text-center text-xs">
             <div>
-              <p className="border-b border-gray-800 mb-2 h-16"></p>
-              <p className="text-xs font-semibold">Prepared By</p>
+              <p className="h-12 border-b border-gray-800"></p>
+              <p className="mt-2 font-semibold">Prepared By</p>
+              <p className="text-xs text-gray-600">Entry User</p>
             </div>
             <div>
-              <p className="border-b border-gray-800 mb-2 h-16"></p>
-              <p className="text-xs font-semibold">Checked By</p>
+              <p className="h-12 border-b border-gray-800"></p>
+              <p className="mt-2 font-semibold">Reviewed By</p>
+              <p className="text-xs text-gray-600">Checker</p>
             </div>
             <div>
-              <p className="border-b border-gray-800 mb-2 h-16"></p>
-              <p className="text-xs font-semibold">Approved By</p>
+              <p className="h-12 border-b border-gray-800"></p>
+              <p className="mt-2 font-semibold">Approved By</p>
+              <p className="text-xs text-gray-600">Provincial Treasurer</p>
             </div>
           </div>
         </div>
