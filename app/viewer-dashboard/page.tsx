@@ -206,12 +206,7 @@ export default function ViewerDashboard() {
 
       // Open print dialog
       setTimeout(() => {
-        const printWindow = window.open('', '', 'height=1000,width=1200')
-        if (printWindow && printRef.current) {
-          printWindow.document.write(printRef.current.outerHTML)
-          printWindow.document.close()
-          printWindow.print()
-        }
+        window.print()
       }, 500)
 
       // Refresh transactions to remove printed ones
