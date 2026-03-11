@@ -69,11 +69,11 @@ export async function POST(
       )
     }
 
-    // Get the batch transactions data using batch_transactions IDs
+    // Get the batch transactions data
     const placeholders = transactionIds.map(() => '?').join(',')
     const batchTxs = await db.all(
-      `SELECT id, transactionData FROM batch_transactions 
-       WHERE batchId = ? AND id IN (${placeholders})`,
+      `SELECT transactionData FROM batch_transactions 
+       WHERE batchId = ? AND transactionId IN (${placeholders})`,
       [batchId, ...transactionIds]
     )
 
@@ -87,77 +87,44 @@ export async function POST(
     // Restore transactions back to main transactions table
     const restoredTransactions = []
     const batchTxIds = []
-    const failedTransactions = []
-
+    
     for (const batchTx of batchTxs) {
       const txData = JSON.parse(batchTx.transactionData)
-
-      try {
-        console.log('[v0] Restoring transaction:', txData.id)
-        
-        // Delete first to ensure no duplicates
-        await db.run(
-          `DELETE FROM transactions WHERE id = ?`,
-          [txData.id]
-        )
-
-        // Then re-insert the transaction
-        await db.run(
-          `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, controlNumber, accountCode, debit, credit, remarks, fund, createdAt)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            txData.id,
-            txData.userId,
-            txData.bankName,
-            txData.payee,
-            txData.address,
-            txData.dvNumber,
-            txData.particulars,
-            txData.amount,
-            txData.date,
-            txData.controlNumber,
-            txData.accountCode,
-            txData.debit,
-            txData.credit,
-            txData.remarks,
-            txData.fund,
-            txData.createdAt,
-          ]
-        )
-
-        console.log('[v0] Successfully restored transaction:', txData.id)
-        restoredTransactions.push(txData)
-        batchTxIds.push(batchTx.id)
-      } catch (txError: any) {
-        console.error(`[v0] Error restoring transaction ${txData.id}:`, txError.message)
-        failedTransactions.push({
-          id: txData.id,
-          error: txError.message
-        })
-        // Continue with other transactions even if one fails
-        continue
-      }
-    }
-
-    // If no transactions were restored, return error
-    if (restoredTransactions.length === 0) {
-      return NextResponse.json(
-        { 
-          error: `Failed to restore transactions. Failed transactions: ${failedTransactions.map(t => t.id).join(', ')}`,
-          failedTransactions
-        },
-        { status: 400 }
+      
+      // Re-insert the transaction
+      await db.run(
+        `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, controlNumber, accountCode, debit, credit, remarks, fund, createdAt)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          txData.id,
+          txData.userId,
+          txData.bankName,
+          txData.payee,
+          txData.address,
+          txData.dvNumber,
+          txData.particulars,
+          txData.amount,
+          txData.date,
+          txData.controlNumber,
+          txData.accountCode,
+          txData.debit,
+          txData.credit,
+          txData.remarks,
+          txData.fund,
+          txData.createdAt,
+        ]
       )
+
+      restoredTransactions.push(txData)
+      batchTxIds.push(txData.id)
     }
 
-    // Remove restored transactions from batch_transactions table using batch_transactions IDs
-    let batchWasDeleted = false
-    
+    // Remove restored transactions from batch_transactions table
     if (batchTxIds.length > 0) {
       const placeholders = batchTxIds.map(() => '?').join(',')
       await db.run(
-        `DELETE FROM batch_transactions WHERE id IN (${placeholders})`,
-        [...batchTxIds]
+        `DELETE FROM batch_transactions WHERE batchId = ? AND transactionId IN (${placeholders})`,
+        [batchId, ...batchTxIds]
       )
 
       // Update batch count and amount
@@ -173,7 +140,6 @@ export async function POST(
           `DELETE FROM transaction_batches WHERE id = ?`,
           [batchId]
         )
-        batchWasDeleted = true
       } else {
         await db.run(
           `UPDATE transaction_batches SET transactionCount = ?, totalAmount = ? WHERE id = ?`,
@@ -186,7 +152,7 @@ export async function POST(
       success: true,
       restoredCount: restoredTransactions.length,
       transactions: restoredTransactions,
-      batchDeleted: batchWasDeleted,
+      batchDeleted: batchId,
     })
   } catch (error) {
     console.error('Error restoring transactions:', error)

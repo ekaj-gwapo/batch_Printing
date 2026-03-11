@@ -31,10 +31,8 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
   const [selectedFund, setSelectedFund] = useState<string>('')
   const [selectedBank, setSelectedBank] = useState<string>('')
   const [selectedMonth, setSelectedMonth] = useState<string>('')
-  const [selectedPlace, setSelectedPlace] = useState<string>('')
   const [funds, setFunds] = useState<string[]>([])
   const [banks, setBanks] = useState<string[]>([])
-  const [places, setPlaces] = useState<string[]>([])
 
   useEffect(() => {
     const fetchBatches = async () => {
@@ -45,62 +43,52 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
         const data = await response.json()
         
         // Extract filters from batches and parse metadata
-        const batchesWithMetadata = data
-          .filter((batch: Batch) => batch.transactionCount > 0) // Filter out empty batches
-          .map((batch: Batch) => {
-            try {
-              const filters = JSON.parse(batch.appliedFilters || '{}')
-              
-              // Get the month from the user-selected date in filters, fallback to createdAt
-              let month = ''
-              if (filters.date) {
-                const filterDate = new Date(filters.date)
-                month = filterDate.toLocaleDateString('en-US', { month: 'long' })
-              } else {
-                const createdDate = new Date(batch.createdAt)
-                month = createdDate.toLocaleDateString('en-US', { month: 'long' })
-              }
-              
-              // Get the primary fund and bank from arrays or single values
-              const funds = filters.funds || (filters.fund ? [filters.fund] : [])
-              const banks = filters.bankNames || (filters.bankName ? [filters.bankName] : [])
-              
-              return {
-                ...batch,
-                fund: Array.isArray(funds) ? funds[0] || 'General Fund' : funds || 'General Fund',
-                bankName: Array.isArray(banks) ? banks[0] || 'All Banks' : banks || 'All Banks',
-                month: month,
-              }
-            } catch (err) {
-              console.log('[v0] Error parsing filters:', err)
-              return {
-                ...batch,
-                fund: 'General Fund',
-                bankName: 'All Banks',
-                month: new Date(batch.createdAt).toLocaleDateString('en-US', { month: 'long' }),
-              }
+        const batchesWithMetadata = data.map((batch: Batch) => {
+          try {
+            const filters = JSON.parse(batch.appliedFilters || '{}')
+            
+            // Get the month from the user-selected date in filters, fallback to createdAt
+            let month = ''
+            if (filters.date) {
+              const filterDate = new Date(filters.date)
+              month = filterDate.toLocaleDateString('en-US', { month: 'long' })
+            } else {
+              const createdDate = new Date(batch.createdAt)
+              month = createdDate.toLocaleDateString('en-US', { month: 'long' })
             }
-          })
+            
+            // Get the primary fund and bank from arrays or single values
+            const funds = filters.funds || (filters.fund ? [filters.fund] : [])
+            const banks = filters.bankNames || (filters.bankName ? [filters.bankName] : [])
+            
+            return {
+              ...batch,
+              fund: Array.isArray(funds) ? funds[0] || 'General Fund' : funds || 'General Fund',
+              bankName: Array.isArray(banks) ? banks[0] || 'All Banks' : banks || 'All Banks',
+              month: month,
+            }
+          } catch (err) {
+            console.log('[v0] Error parsing filters:', err)
+            return {
+              ...batch,
+              fund: 'General Fund',
+              bankName: 'All Banks',
+              month: new Date(batch.createdAt).toLocaleDateString('en-US', { month: 'long' }),
+            }
+          }
+        })
         
         setBatches(batchesWithMetadata)
         
-        // Extract all unique funds, banks, and places from all batches
+        // Extract all unique funds and banks from all batches
         const allFunds = new Set<string>()
         const allBanks = new Set<string>()
-        const allPlaces = new Set<string>()
-        const regularFunds = ['General Fund', 'Development Fund', 'Trust Fund', 'Hospital Fund']
         
         batchesWithMetadata.forEach((batch: Batch) => {
           try {
             const filters = JSON.parse(batch.appliedFilters || '{}')
             if (filters.funds && Array.isArray(filters.funds)) {
-              filters.funds.forEach((f: string) => {
-                allFunds.add(f)
-                // Only add to places if it's not a regular fund (i.e., it's a MOPH location)
-                if (!regularFunds.includes(f)) {
-                  allPlaces.add(f)
-                }
-              })
+              filters.funds.forEach((f: string) => allFunds.add(f))
             }
             if (filters.bankNames && Array.isArray(filters.bankNames)) {
               filters.bankNames.forEach((b: string) => allBanks.add(b))
@@ -112,7 +100,6 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
         
         setFunds(Array.from(allFunds).sort())
         setBanks(Array.from(allBanks).sort())
-        setPlaces(Array.from(allPlaces).sort())
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred')
       } finally {
@@ -144,7 +131,6 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
     if (selectedFund && batch.fund !== selectedFund) return false
     if (selectedBank && batch.bankName !== selectedBank) return false
     if (selectedMonth && batch.month !== selectedMonth) return false
-    if (selectedPlace && batch.fund !== selectedPlace) return false
     return true
   })
 
@@ -235,29 +221,12 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
             </select>
           </div>
 
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-gray-700">Place</label>
-            <select
-              value={selectedPlace}
-              onChange={(e) => setSelectedPlace(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="">All Places</option>
-              {places.filter(p => p).map((place) => (
-                <option key={place} value={place}>
-                  {place}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {(selectedFund || selectedBank || selectedMonth || selectedPlace) && (
+          {(selectedFund || selectedBank || selectedMonth) && (
             <Button
               onClick={() => {
                 setSelectedFund('')
                 setSelectedBank('')
                 setSelectedMonth('')
-                setSelectedPlace('')
               }}
               variant="ghost"
               size="sm"
