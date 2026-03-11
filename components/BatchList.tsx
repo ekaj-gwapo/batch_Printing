@@ -88,6 +88,7 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
         const allFunds = new Set<string>()
         const allBanks = new Set<string>()
         const allPlaces = new Set<string>()
+        const regularFunds = ['General Fund', 'Development Fund', 'Trust Fund', 'Hospital Fund']
         
         batchesWithMetadata.forEach((batch: Batch) => {
           try {
@@ -95,7 +96,10 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
             if (filters.funds && Array.isArray(filters.funds)) {
               filters.funds.forEach((f: string) => {
                 allFunds.add(f)
-                allPlaces.add(f)
+                // Only add to places if it's not a regular fund (i.e., it's a MOPH location)
+                if (!regularFunds.includes(f)) {
+                  allPlaces.add(f)
+                }
               })
             }
             if (filters.bankNames && Array.isArray(filters.bankNames)) {

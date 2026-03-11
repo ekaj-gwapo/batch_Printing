@@ -115,7 +115,13 @@ export default function ViewerDashboard() {
   }
 
   const extractPlaces = (txs: Transaction[]) => {
-    const placeList = Array.from(new Set(txs.map(tx => tx.fund).filter(Boolean)))
+    const regularFunds = ['General Fund', 'Development Fund', 'Trust Fund', 'Hospital Fund']
+    const placeList = Array.from(new Set(
+      txs
+        .map(tx => tx.fund)
+        .filter(Boolean)
+        .filter(fund => !regularFunds.includes(fund))
+    ))
     setPlaces(placeList.sort())
   }
 
