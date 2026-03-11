@@ -59,12 +59,8 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString()
     const filterStr = JSON.stringify(appliedFilters || {})
 
-    // Get the count of batches for this viewer to generate sequential number
-    const batchCount = await db.get(
-      `SELECT COUNT(*) as count FROM transaction_batches WHERE viewerId = ?`,
-      [viewerId]
-    )
-    const sequentialNumber = String(batchCount.count).padStart(2, '0')
+    // Always start numbering from 01 for new batches
+    const sequentialNumber = String(1).padStart(2, '0')
     const batchName = `Batch ${sequentialNumber}`
 
     // Create batch record
