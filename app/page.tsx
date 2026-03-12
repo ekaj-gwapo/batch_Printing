@@ -21,19 +21,19 @@ export default function Home() {
             <div className="flex items-center gap-4">
               {/* Logo 1 */}
               <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-    <Image src="/logos/logo4.png" alt="Logo 4" width={64} height={64} />
-  </div>
+                <Image src="/logos/logo4.png" alt="Logo 4" width={64} height={64} />
+              </div>
               {/* Logo 2 */}
-               <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-    <Image src="/logos/logo3.jpg" alt="Logo 4" width={64} height={64} />
-  </div>
+              <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                <Image src="/logos/logo3.jpg" alt="Logo 4" width={64} height={64} />
+              </div>
               {/* Logo 3 */}
               <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-    <Image src="/logos/logo1.jpg" alt="Logo 3" width={64} height={64} />
-  </div>
+                <Image src="/logos/logo1.jpg" alt="Logo 3" width={64} height={64} />
+              </div>
               <div className="w-16 h-16 rounded-full bg-white shadow-lg flex hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 items-center justify-center overflow-hidden">
-    <Image src="/logos/logo2.png" alt="Logo 2" width={100} height={100} className="object-contain" />
-  </div>
+                <Image src="/logos/logo2.png" alt="Logo 2" width={100} height={100} className="object-contain" />
+              </div>
             </div>
             <Link href="/auth/login">
               <Button className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 text-lg">
@@ -47,28 +47,28 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative w-full px-100 py-24 text-center overflow-hidden">
         <div
-    className="absolute inset-0 bg-cover bg-center"
-    style={{ backgroundImage: "url('/bg.jpg')" }}
-  />
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/bg.jpg')" }}
+        />
 
-  {/* White fade overlay */}
-  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/1 to-white backdrop-blur-sm" />
+        {/* White fade overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/1 to-white backdrop-blur-sm" />
 
-  {/* Content */}
-  <div className="relative z-10 space-y-6">
-    <h1 className="text-5xl md:text-6xl font-bold text-emerald-900 leading-tight">
-      Checked & Issued Reports System
-    </h1>
-    <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
-      Track, review, and manage all checked and issued items in one place. Generate accurate reports and monitor transaction history with real-time updates.
-    </p>
-    <Link href="/auth/login" className="inline-block">
-      <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
-        Login Now <ArrowRight className="w-5 h-5" />
-      </Button>
-    </Link>
-  </div>
-</section>
+        {/* Content */}
+        <div className="relative z-10 space-y-6">
+          <h1 className="text-5xl md:text-6xl font-bold text-emerald-900 leading-tight">
+            Checked & Issued Reports System
+          </h1>
+          <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+            Track, review, and manage all checked and issued items in one place. Generate accurate reports and monitor transaction history with real-time updates.
+          </p>
+          <Link href="/auth/login" className="inline-block">
+            <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+              Login Now <ArrowRight className="w-5 h-5" />
+            </Button>
+          </Link>
+        </div>
+      </section>
 
       {/* Features Section */}
       <section className="bg-white py-20">
@@ -164,7 +164,7 @@ export default function Home() {
                 <div className="bg-gray-50 rounded-lg p-4 space-y-3">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Email:</p>
-                    <p className="text-lg font-mono text-gray-900">viewer@demo.com</p>
+                    <p className="text-lg font-mono text-gray-900">viewer@demo</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-600">Password:</p>

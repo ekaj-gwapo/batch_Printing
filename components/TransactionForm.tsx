@@ -4,6 +4,14 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { DatePicker } from '@/components/DatePicker'
 import { AlertCircle } from 'lucide-react'
 
 type TransactionFormProps = {
@@ -263,13 +271,9 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="date">Date *</Label>
-          <Input
-            id="date"
-            name="date"
-            type="date"
+          <DatePicker
             value={formData.date}
-            onChange={handleChange}
-            required
+            onChange={(val) => setFormData(prev => ({ ...prev, date: val }))}
           />
         </div>
         <div>
@@ -288,35 +292,39 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="fund">Fund</Label>
-          <select
-            id="fund"
-            name="fund"
-            value={formData.fund}
-            onChange={handleChange}
+          <Select
             disabled={formData.moph_location !== ''}
-            className="w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            value={formData.fund}
+            onValueChange={(val) => setFormData(prev => ({ ...prev, fund: val === 'none' ? '' : val }))}
           >
-            <option value="">-- Select a Fund --</option>
-            {fundOptions.map(option => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </select>
+            <SelectTrigger id="fund" className="w-full bg-background mt-2">
+              <SelectValue placeholder="-- Select a Fund --" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none" className="text-gray-500 italic">-- Select a Fund --</SelectItem>
+              {fundOptions.map(option => (
+                <SelectItem key={option} value={option}>{option}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <Label htmlFor="moph_location">MOPH Location</Label>
-          <select
-            id="moph_location"
-            name="moph_location"
-            value={formData.moph_location}
-            onChange={handleChange}
+          <Select
             disabled={formData.fund !== ''}
-            className="w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            value={formData.moph_location}
+            onValueChange={(val) => setFormData(prev => ({ ...prev, moph_location: val === 'none' ? '' : val }))}
           >
-            <option value="">-- Select MOPH Location --</option>
-            {mophOptions.map(option => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </select>
+            <SelectTrigger id="moph_location" className="w-full bg-background mt-2">
+              <SelectValue placeholder="-- Select MOPH Location --" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none" className="text-gray-500 italic">-- Select MOPH Location --</SelectItem>
+              {mophOptions.map(option => (
+                <SelectItem key={option} value={option}>{option}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

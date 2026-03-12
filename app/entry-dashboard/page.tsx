@@ -6,8 +6,16 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import TransactionForm from '@/components/TransactionForm'
 import TransactionTable from '@/components/TransactionTable'
+import { DatePicker } from '@/components/DatePicker'
 import { LogOut, Plus, Settings, Search } from 'lucide-react'
 import Link from 'next/link'
 
@@ -122,7 +130,7 @@ export default function EntryDashboard() {
       )
     }
 
-    if (selectedBankName) {
+    if (selectedBankName && selectedBankName !== 'none') {
       filtered = filtered.filter(tx => tx.bankName === selectedBankName)
     }
 
@@ -132,11 +140,11 @@ export default function EntryDashboard() {
       )
     }
 
-    if (selectedFund) {
+    if (selectedFund && selectedFund !== 'none') {
       filtered = filtered.filter(tx => tx.fund === selectedFund)
     }
 
-    if (selectedPlace) {
+    if (selectedPlace && selectedPlace !== 'none') {
       filtered = filtered.filter(tx => tx.fund === selectedPlace)
     }
 
@@ -247,61 +255,59 @@ export default function EntryDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <Label htmlFor="bank-filter" className="mb-2 block">Bank Name</Label>
-                <select
-                  id="bank-filter"
-                  value={selectedBankName}
-                  onChange={(e) => setSelectedBankName(e.target.value)}
-                  className="w-full rounded-lg border border-emerald-200 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
-                >
-                  <option value="">All Bank Names</option>
-                  {selectedBankName && !bankNames.includes(selectedBankName) && (
-                    <option value={selectedBankName}>{selectedBankName}</option>
-                  )}
-                  {bankNames.map(name => (
-                    <option key={name} value={name}>{name}</option>
-                  ))}
-                </select>
+                <Select value={selectedBankName} onValueChange={setSelectedBankName}>
+                  <SelectTrigger className="w-full bg-white border-emerald-200 focus:ring-emerald-600">
+                    <SelectValue placeholder="All Bank Names" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none" className="text-gray-500 italic">All Bank Names</SelectItem>
+                    {selectedBankName && selectedBankName !== 'none' && !bankNames.includes(selectedBankName) && (
+                      <SelectItem value={selectedBankName}>{selectedBankName}</SelectItem>
+                    )}
+                    {bankNames.map(name => (
+                      <SelectItem key={name} value={name}>{name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label htmlFor="date-filter" className="mb-2 block">Date</Label>
-                <input
-                  id="date-filter"
-                  type="date"
+                <DatePicker
                   value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  className="w-full rounded-lg border border-emerald-200 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                  onChange={setSelectedDate}
+                  className="w-full rounded-lg border-emerald-200 bg-white px-4 py-2 text-gray-900 focus-visible:ring-2 focus-visible:ring-emerald-600 font-normal"
                 />
               </div>
               <div>
                 <Label htmlFor="fund-filter" className="mb-2 block">Fund</Label>
-                <select
-                  id="fund-filter"
-                  value={selectedFund}
-                  onChange={(e) => setSelectedFund(e.target.value)}
-                  className="w-full rounded-lg border border-emerald-200 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
-                >
-                  <option value="">All Funds</option>
-                  {fundOptions.map(option => (
-                    <option key={option} value={option}>{option}</option>
-                  ))}
-                </select>
+                <Select value={selectedFund} onValueChange={setSelectedFund}>
+                  <SelectTrigger className="w-full bg-white border-emerald-200 focus:ring-emerald-600">
+                    <SelectValue placeholder="All Funds" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none" className="text-gray-500 italic">All Funds</SelectItem>
+                    {fundOptions.map(option => (
+                      <SelectItem key={option} value={option}>{option}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label htmlFor="place-filter" className="mb-2 block">MOPH</Label>
-                <select
-                  id="place-filter"
-                  value={selectedPlace}
-                  onChange={(e) => setSelectedPlace(e.target.value)}
-                  className="w-full rounded-lg border border-emerald-200 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
-                >
-                  <option value="">All Locations</option>
-                  {selectedPlace && !places.includes(selectedPlace) && (
-                    <option value={selectedPlace}>{selectedPlace}</option>
-                  )}
-                  {places.map(place => (
-                    <option key={place} value={place}>{place}</option>
-                  ))}
-                </select>
+                <Select value={selectedPlace} onValueChange={setSelectedPlace}>
+                  <SelectTrigger className="w-full bg-white border-emerald-200 focus:ring-emerald-600">
+                    <SelectValue placeholder="All Locations" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none" className="text-gray-500 italic">All Locations</SelectItem>
+                    {selectedPlace && selectedPlace !== 'none' && !places.includes(selectedPlace) && (
+                      <SelectItem value={selectedPlace}>{selectedPlace}</SelectItem>
+                    )}
+                    {places.map(place => (
+                      <SelectItem key={place} value={place}>{place}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             {(selectedBankName || selectedDate || selectedFund || selectedPlace) && (

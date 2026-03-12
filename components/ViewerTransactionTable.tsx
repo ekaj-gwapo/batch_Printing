@@ -111,7 +111,7 @@ export default function ViewerTransactionTable({
                 }`}
               >
                 <td className="px-4 py-3 text-sm text-gray-900 font-medium whitespace-nowrap">
-                  {new Date(tx.date).toLocaleDateString()}
+                  {new Date(tx.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.checkNumber || '-'}</td>
                 <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.dvNumber}</td>

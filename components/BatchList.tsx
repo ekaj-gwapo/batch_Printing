@@ -3,6 +3,13 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Archive, ChevronRight, X } from 'lucide-react'
 
 type Batch = {
@@ -141,10 +148,10 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
   }
 
   const filteredBatches = batches.filter((batch) => {
-    if (selectedFund && batch.fund !== selectedFund) return false
-    if (selectedBank && batch.bankName !== selectedBank) return false
-    if (selectedMonth && batch.month !== selectedMonth) return false
-    if (selectedPlace && batch.fund !== selectedPlace) return false
+    if (selectedFund && selectedFund !== 'none' && batch.fund !== selectedFund) return false
+    if (selectedBank && selectedBank !== 'none' && batch.bankName !== selectedBank) return false
+    if (selectedMonth && selectedMonth !== 'none' && batch.month !== selectedMonth) return false
+    if (selectedPlace && selectedPlace !== 'none' && batch.fund !== selectedPlace) return false
     return true
   })
 
@@ -189,66 +196,70 @@ export default function BatchList({ viewerId, onSelectBatch }: BatchListProps) {
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             <label className="text-sm font-medium text-gray-700">Fund</label>
-            <select
-              value={selectedFund}
-              onChange={(e) => setSelectedFund(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="">All Funds</option>
-              {funds.filter(f => f).map((fund) => (
-                <option key={fund} value={fund}>
-                  {fund}
-                </option>
-              ))}
-            </select>
+            <div className="w-40">
+              <Select value={selectedFund} onValueChange={setSelectedFund}>
+                <SelectTrigger className="w-full bg-white border-gray-300 focus:ring-emerald-500">
+                  <SelectValue placeholder="All Funds" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none" className="text-gray-500 italic">All Funds</SelectItem>
+                  {funds.filter(f => f).map((fund) => (
+                    <SelectItem key={fund} value={fund}>{fund}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
             <label className="text-sm font-medium text-gray-700">Bank</label>
-            <select
-              value={selectedBank}
-              onChange={(e) => setSelectedBank(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="">All Banks</option>
-              {banks.filter(b => b).map((bank) => (
-                <option key={bank} value={bank}>
-                  {bank}
-                </option>
-              ))}
-            </select>
+            <div className="w-40">
+              <Select value={selectedBank} onValueChange={setSelectedBank}>
+                <SelectTrigger className="w-full bg-white border-gray-300 focus:ring-emerald-500">
+                  <SelectValue placeholder="All Banks" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none" className="text-gray-500 italic">All Banks</SelectItem>
+                  {banks.filter(b => b).map((bank) => (
+                    <SelectItem key={bank} value={bank}>{bank}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
             <label className="text-sm font-medium text-gray-700">Month</label>
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="">All Months</option>
-              {uniqueMonths.map((month) => (
-                <option key={month} value={month}>
-                  {month}
-                </option>
-              ))}
-            </select>
+            <div className="w-40">
+              <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                <SelectTrigger className="w-full bg-white border-gray-300 focus:ring-emerald-500">
+                  <SelectValue placeholder="All Months" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none" className="text-gray-500 italic">All Months</SelectItem>
+                  {uniqueMonths.map((month) => (
+                    <SelectItem key={month} value={month}>{month}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
             <label className="text-sm font-medium text-gray-700">Place</label>
-            <select
-              value={selectedPlace}
-              onChange={(e) => setSelectedPlace(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="">All Places</option>
-              {places.filter(p => p).map((place) => (
-                <option key={place} value={place}>
-                  {place}
-                </option>
-              ))}
-            </select>
+            <div className="w-40">
+              <Select value={selectedPlace} onValueChange={setSelectedPlace}>
+                <SelectTrigger className="w-full bg-white border-gray-300 focus:ring-emerald-500">
+                  <SelectValue placeholder="All Places" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none" className="text-gray-500 italic">All Places</SelectItem>
+                  {places.filter(p => p).map((place) => (
+                    <SelectItem key={place} value={place}>{place}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {(selectedFund || selectedBank || selectedMonth || selectedPlace) && (

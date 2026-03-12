@@ -3,6 +3,13 @@
 import { useState, useMemo } from 'react'
 import { X, ArrowUpDown, Trash2, Edit2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 type Transaction = {
   id: string
@@ -184,7 +191,7 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                         : 'bg-emerald-50/30 hover:bg-emerald-50'
                   }`}
                 >
-                  <td className="px-6 py-3 text-sm text-gray-900">{new Date(tx.date).toLocaleDateString()}</td>
+                  <td className="px-6 py-3 text-sm text-gray-900">{new Date(tx.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}</td>
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.checkNumber || '-'}</td>
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.dvNumber}</td>
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.accountCode}</td>
@@ -297,16 +304,20 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-emerald-600 uppercase">Fund</label>
-                  <select
+                  <label className="text-xs font-semibold text-emerald-600 uppercase mb-1 block">Fund</label>
+                  <Select
                     value={editFormData.fund || 'General Fund'}
-                    onChange={(e) => handleEditChange('fund', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
+                    onValueChange={(val) => handleEditChange('fund', val)}
                   >
-                    {['General Fund', 'Development Fund', 'Trust Fund', 'Hospital Fund', 'MOPH'].map(f => (
-                      <option key={f} value={f}>{f}</option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="w-full h-8 text-sm">
+                      <SelectValue placeholder="Select Fund" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {['General Fund', 'Development Fund', 'Trust Fund', 'Hospital Fund', 'MOPH'].map(f => (
+                        <SelectItem key={f} value={f}>{f}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">Amount</label>
@@ -363,7 +374,7 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
               <>
                 <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">Date</label>
-                  <p className="text-sm text-gray-900">{new Date(selectedTransaction.date).toLocaleDateString()}</p>
+                  <p className="text-sm text-gray-900">{new Date(selectedTransaction.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}</p>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">Bank Name</label>
