@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import TransactionForm from '@/components/TransactionForm'
 import TransactionTable from '@/components/TransactionTable'
-import { LogOut, Plus, Settings } from 'lucide-react'
+import { LogOut, Plus, Settings, Search } from 'lucide-react'
 import Link from 'next/link'
 
 type Transaction = {
@@ -27,6 +27,8 @@ type Transaction = {
   remarks: string
   fund: string
   createdAt: string
+  checkNumber?: string
+  responsibilityCenter?: string
 }
 
 export default function EntryDashboard() {
@@ -42,6 +44,7 @@ export default function EntryDashboard() {
   const [selectedFund, setSelectedFund] = useState<string>('')
   const [selectedPlace, setSelectedPlace] = useState<string>('')
   const [places, setPlaces] = useState<string[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
   const router = useRouter()
 
   const fundOptions = [
@@ -107,6 +110,18 @@ export default function EntryDashboard() {
   const applyFilters = () => {
     let filtered = [...allTransactions]
 
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase()
+      filtered = filtered.filter(tx => 
+        tx.checkNumber?.toLowerCase().includes(q) ||
+        tx.dvNumber?.toLowerCase().includes(q) ||
+        tx.accountCode?.toLowerCase().includes(q) ||
+        tx.responsibilityCenter?.toLowerCase().includes(q) ||
+        tx.payee?.toLowerCase().includes(q) ||
+        tx.amount?.toString().includes(q)
+      )
+    }
+
     if (selectedBankName) {
       filtered = filtered.filter(tx => tx.bankName === selectedBankName)
     }
@@ -132,7 +147,7 @@ export default function EntryDashboard() {
     if (allTransactions.length > 0) {
       applyFilters()
     }
-  }, [selectedBankName, selectedDate, selectedFund, selectedPlace, allTransactions])
+  }, [selectedBankName, selectedDate, selectedFund, selectedPlace, searchQuery, allTransactions])
 
   const handleLogout = () => {
     localStorage.removeItem('user')
@@ -208,6 +223,20 @@ export default function EntryDashboard() {
             </CardContent>
           </Card>
         )}
+
+        {/* Search Bar */}
+        <div className="flex justify-end mb-4">
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search by check no, dv no, account code, resp center, payee, amount..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 w-full border-emerald-200 focus-visible:ring-emerald-600 bg-white"
+            />
+          </div>
+        </div>
 
         {/* Filters */}
         <Card className="border-emerald-200">

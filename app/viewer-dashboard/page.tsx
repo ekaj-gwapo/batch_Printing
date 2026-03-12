@@ -3,10 +3,11 @@
 import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import ViewerTransactionTable from '@/components/ViewerTransactionTable'
 import PrintReport from '@/components/PrintReport'
-import { LogOut, ChevronDown, Settings, Printer, Archive } from 'lucide-react'
+import { LogOut, ChevronDown, Settings, Printer, Archive, Search } from 'lucide-react'
 import Link from 'next/link'
 
 type Transaction = {
@@ -44,6 +45,7 @@ export default function ViewerDashboard() {
   const [selectedFund, setSelectedFund] = useState<string>('')
   const [selectedPlace, setSelectedPlace] = useState<string>('')
   const [places, setPlaces] = useState<string[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
   const [batchId, setBatchId] = useState<string | null>(null)
   const [isCreatingBatch, setIsCreatingBatch] = useState(false)
   const printRef = useRef<HTMLDivElement>(null)
@@ -130,6 +132,18 @@ export default function ViewerDashboard() {
   const applyFilters = (data: Transaction[]) => {
     let filtered = [...data]
     
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase()
+      filtered = filtered.filter(tx => 
+        tx.checkNumber?.toLowerCase().includes(q) ||
+        tx.dvNumber?.toLowerCase().includes(q) ||
+        tx.accountCode?.toLowerCase().includes(q) ||
+        tx.responsibilityCenter?.toLowerCase().includes(q) ||
+        tx.payee?.toLowerCase().includes(q) ||
+        tx.amount?.toString().includes(q)
+      )
+    }
+    
     if (selectedBankName) {
       filtered = filtered.filter(tx => tx.bankName === selectedBankName)
     }
@@ -157,7 +171,7 @@ export default function ViewerDashboard() {
     if (allTransactions.length > 0) {
       applyFilters(allTransactions)
     }
-  }, [selectedBankName, selectedDate, selectedFund, selectedPlace, allTransactions])
+  }, [selectedBankName, selectedDate, selectedFund, selectedPlace, searchQuery, allTransactions])
 
   const handleLogout = () => {
     localStorage.removeItem('user')
@@ -253,6 +267,20 @@ export default function ViewerDashboard() {
 
       {/* Main Content - Hidden on Print */}
       <div className="w-full px-6 py-8 print:hidden">
+        {/* Search Bar */}
+        <div className="flex justify-end mb-4">
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search by check no, dv no, account code, resp center, payee, amount..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 w-full border-emerald-200 focus-visible:ring-emerald-600 bg-white"
+            />
+          </div>
+        </div>
+
         {/* Filters */}
         <div className="bg-white rounded-lg p-6 mb-8 border border-emerald-100">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
