@@ -229,8 +229,28 @@ export default function ViewerDashboard() {
       // Open print dialog and ONLY refresh state after a delay or dialog close
       setTimeout(async () => {
         window.print()
-        // Refresh transactions to remove printed ones AFTER printing
-        await fetchTransactions(selectedEntryUser)
+        
+        // Ask the user if the print was successful
+        const confirmed = confirm("Did the document print successfully?\n\nClick OK to confirm batch creation.\nClick Cancel to undo this batch and restore the transactions.")
+        
+        if (confirmed) {
+          // Refresh transactions to remove printed ones AFTER printing
+          await fetchTransactions(selectedEntryUser)
+        } else {
+          // Undo batch creation
+          try {
+            setIsCreatingBatch(true)
+            await fetch(`/api/batches/${batch.id}`, { method: 'DELETE' })
+            setBatchId(null)
+            alert("Batch creation has been undone. Transactions are restored to the list.")
+          } catch (error) {
+            console.error('Error undoing batch:', error)
+            alert('Failed to undo batch creation.')
+          } finally {
+            setIsCreatingBatch(false)
+            await fetchTransactions(selectedEntryUser)
+          }
+        }
       }, 500)
     } catch (error) {
       console.error('Error creating batch:', error)

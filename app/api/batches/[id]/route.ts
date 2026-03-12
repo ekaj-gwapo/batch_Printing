@@ -198,3 +198,63 @@ export async function POST(
     )
   }
 }
+
+// DELETE batch completely and restore transactions
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await initDb()
+    const db = await getDb()
+    const { id: batchId } = await params
+
+    // Get ALL transactions in this batch
+    const batchTxs = await db.all(
+      `SELECT id, transactionData FROM batch_transactions WHERE batchId = ?`,
+      [batchId]
+    )
+
+    if (batchTxs.length === 0) {
+      // Just delete the empty batch
+      await db.run(`DELETE FROM transaction_batches WHERE id = ?`, [batchId])
+      return NextResponse.json({ success: true, message: 'Empty batch deleted' })
+    }
+
+    // Restore transactions back to main transactions table
+    for (const batchTx of batchTxs) {
+      const txData = JSON.parse(batchTx.transactionData)
+      try {
+        await db.run(
+          `DELETE FROM transactions WHERE id = ?`,
+          [txData.id]
+        )
+        await db.run(
+          `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, checkNumber, controlNumber, accountCode, debit, credit, remarks, fund, responsibilityCenter, createdAt)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            txData.id, txData.userId, txData.bankName, txData.payee, txData.address, txData.dvNumber,
+            txData.particulars, txData.amount, txData.date, txData.checkNumber, txData.controlNumber,
+            txData.accountCode, txData.debit, txData.credit, txData.remarks, txData.fund,
+            txData.responsibilityCenter, txData.createdAt,
+          ]
+        )
+      } catch (e: any) {
+        console.error('Error restoring transaction', e.message)
+      }
+    }
+
+    // Delete from batch_transactions and transaction_batches
+    await db.run(`DELETE FROM batch_transactions WHERE batchId = ?`, [batchId])
+    await db.run(`DELETE FROM transaction_batches WHERE id = ?`, [batchId])
+
+    return NextResponse.json({ success: true, message: 'Batch deleted and transactions restored' })
+  } catch (error) {
+    console.error('Error deleting batch:', error)
+    return NextResponse.json(
+      { error: 'Failed to delete batch' },
+      { status: 500 }
+    )
+  }
+}
+

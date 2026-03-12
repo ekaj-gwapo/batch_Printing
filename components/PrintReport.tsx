@@ -223,7 +223,7 @@ I CERTIFY that this report issued in ______ sheet(s), is a full, true and correc
 
 </p>
 
-<div className="mt-8 flex justify-between pr-16 pl-6 mb-2">
+<div className="mt-8 flex justify-between pr-12 pl-6 mb-2 gap-8">
 
 <div className="text-left">
 
@@ -231,7 +231,7 @@ I CERTIFY that this report issued in ______ sheet(s), is a full, true and correc
 
 <p className="mb-6">Acting Cashier / Supervising Admin. Officer</p>
 
-<div className="border-b border-black w-64"></div>
+<div className="border-b border-black w-60"></div>
 
 </div>
 
@@ -239,7 +239,7 @@ I CERTIFY that this report issued in ______ sheet(s), is a full, true and correc
 
 <p className="mb-6">Date</p>
 
-<div className="border-b border-black w-40"></div>
+<div className="border-b border-black w-24"></div>
 
 </div>
 
