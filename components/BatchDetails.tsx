@@ -129,11 +129,12 @@ export default function BatchDetails({
     }
   }
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-PH', {
-      style: 'currency',
-      currency: 'PHP',
-    }).format(amount)
+  const formatCurrency = (amount: number, showSymbol: boolean = true) => {
+    const formatted = amount.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+    return showSymbol ? `₱ ${formatted}` : formatted
   }
 
   const formatDate = (dateString: string) => {
@@ -324,7 +325,7 @@ export default function BatchDetails({
                     </td>
                     <td className="px-4 py-3 text-gray-900">{tx.fund}</td>
                     <td className="px-4 py-3 text-right text-gray-900 font-semibold">
-                      {formatCurrency(tx.amount)}
+                      {formatCurrency(tx.amount, idx === 0)}
                     </td>
                   </tr>
                 ))}

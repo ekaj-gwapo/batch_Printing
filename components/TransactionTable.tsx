@@ -201,7 +201,7 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                   <td className="px-6 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.payee}</td>
                   <td className="px-6 py-3 text-sm text-gray-900 max-w-xs truncate">{tx.particulars}</td>
                   <td className="px-6 py-3 text-sm text-right text-gray-900 font-medium">
-                    ${tx.amount.toFixed(2)}
+                    {idx === 0 ? '₱ ' : ''}{tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.remarks}</td>
                 </tr>
@@ -412,16 +412,16 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">Amount</label>
-                  <p className="text-sm text-gray-900 font-medium">${selectedTransaction.amount.toFixed(2)}</p>
+                  <p className="text-sm text-gray-900 font-medium">₱ {selectedTransaction.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs font-semibold text-emerald-600 uppercase">Debit</label>
-                    <p className="text-sm text-gray-900">{selectedTransaction.debit > 0 ? `$${selectedTransaction.debit.toFixed(2)}` : '-'}</p>
+                    <p className="text-sm text-gray-900">{selectedTransaction.debit > 0 ? `₱ ${selectedTransaction.debit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}</p>
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-emerald-600 uppercase">Credit</label>
-                    <p className="text-sm text-gray-900">{selectedTransaction.credit > 0 ? `$${selectedTransaction.credit.toFixed(2)}` : '-'}</p>
+                    <p className="text-sm text-gray-900">{selectedTransaction.credit > 0 ? `₱ ${selectedTransaction.credit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}</p>
                   </div>
                 </div>
                 <div>

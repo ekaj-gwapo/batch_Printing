@@ -107,7 +107,7 @@ return (
 
 {transactions.length > 0 ? (
 
-transactions.map((t) => (
+transactions.map((t, idx) => (
 
 <tr key={t.id}>
 
@@ -161,7 +161,7 @@ transactions.map((t) => (
 
 <td className="border border-black p-1 text-right">
 
-{t.amount.toLocaleString(undefined,{minimumFractionDigits:2})}
+{idx === 0 ? '₱ ' : ''}{t.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 
 </td>
 
@@ -203,7 +203,7 @@ TOTAL
 
 <td className="border border-black p-1 text-right font-bold">
 
-{totalAmount.toLocaleString(undefined,{minimumFractionDigits:2})}
+₱ {totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 
 </td>
 

@@ -124,7 +124,7 @@ export default function ViewerTransactionTable({
                   {tx.particulars}
                 </td>
                 <td className="px-4 py-3 text-sm text-right text-gray-900 font-semibold whitespace-nowrap">
-                  ${tx.amount.toFixed(2)}
+                  {idx === 0 ? '₱ ' : ''}{tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-600 max-w-xs truncate">{tx.remarks}</td>
               </tr>

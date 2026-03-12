@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowRight, Lock, Eye, FileText } from 'lucide-react'
+import { ArrowRight, Lock, Eye, FileText, CheckCircle2, UserCircle2, MonitorCheck } from 'lucide-react'
 
 export default function Home() {
   return (
@@ -71,53 +71,86 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="bg-white py-20">
-        <div className="w-full px-6">
-          <h2 className="text-3xl font-bold text-emerald-900 text-center mb-12">
-            Designed for Efficiency
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
+      <section className="bg-white py-24">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16 space-y-4">
+            <h2 className="text-4xl font-extrabold text-emerald-950 tracking-tight">
+              Designed for Efficiency
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Tailored interfaces for different roles to streamline your workflow and ensure data accuracy.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-10">
             {/* Entry User Card */}
-            <Card className="border-emerald-200 shadow-lg">
-              <CardHeader>
-                <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
-                  <FileText className="w-6 h-6 text-emerald-600" />
+            <Card className="border-emerald-100 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden group bg-white">
+              <div className="h-2 w-full bg-emerald-600" />
+              <CardHeader className="pb-4 pt-8 px-8">
+                <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-emerald-100 transition-all duration-300 shadow-sm border border-emerald-100">
+                  <FileText className="w-7 h-7 text-emerald-600" />
                 </div>
-                <CardTitle className="text-emerald-900">Data Entry User</CardTitle>
-                <CardDescription>Input and manage transaction data</CardDescription>
+                <CardTitle className="text-2xl text-emerald-950 font-bold">Data Entry User</CardTitle>
+                <CardDescription className="text-base mt-2">Specialized interface to input and manage transaction data securely.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4 text-gray-600">
-                <p>✓ Enter transaction details including:</p>
-                <ul className="ml-4 space-y-2 text-sm">
-                  <li>• Bank name, payee, and address</li>
-                  <li>• DV number and particulars</li>
-                  <li>• Amount, date, and account code</li>
-                  <li>• Debit/credit information</li>
-                  <li>• Control number and remarks</li>
-                </ul>
-                <p className="pt-2">Secure and organized data management with comprehensive validation.</p>
+              <CardContent className="px-8 pb-8 space-y-6 text-gray-700">
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-gray-900 border-b border-emerald-50 pb-2">Key Data Entry Capabilities</h4>
+                  <ul className="space-y-3">
+                    {[
+                      'Bank name, payee, and complete address',
+                      'DV number and detailed particulars',
+                      'Precise amounts, dates, and account codes',
+                      'Comprehensive debit/credit information',
+                      'Control numbers and additional remarks'
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                        <span className="text-gray-600 leading-snug">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 mt-6 group-hover:bg-emerald-50 transition-colors">
+                  <p className="text-sm font-medium text-emerald-900 text-center">
+                    Secure and organized data management with comprehensive validation.
+                  </p>
+                </div>
               </CardContent>
             </Card>
 
             {/* Viewer User Card */}
-            <Card className="border-emerald-200 shadow-lg">
-              <CardHeader>
-                <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
-                  <Eye className="w-6 h-6 text-emerald-600" />
+            <Card className="border-emerald-100 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden group bg-white">
+              <div className="h-2 w-full bg-emerald-500" />
+              <CardHeader className="pb-4 pt-8 px-8">
+                <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-emerald-100 transition-all duration-300 shadow-sm border border-emerald-100">
+                  <Eye className="w-7 h-7 text-emerald-600" />
                 </div>
-                <CardTitle className="text-emerald-900">Viewer User</CardTitle>
-                <CardDescription>Access and analyze transaction records</CardDescription>
+                <CardTitle className="text-2xl text-emerald-950 font-bold">Viewer User</CardTitle>
+                <CardDescription className="text-base mt-2">Powerful tools to access, analyze, and report transaction records.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4 text-gray-600">
-                <p>✓ Instant access to transaction data</p>
-                <p>✓ Advanced sorting and filtering:</p>
-                <ul className="ml-4 space-y-2 text-sm">
-                  <li>• Sort by bank name</li>
-                  <li>• Sort by fund</li>
-                  <li>• Sort by date</li>
-                  <li>• Sort by account code</li>
-                </ul>
-                <p className="pt-2">Real-time data synchronization and reporting capabilities.</p>
+              <CardContent className="px-8 pb-8 space-y-6 text-gray-700">
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-gray-900 border-b border-emerald-50 pb-2">Analysis & Filtering Tools</h4>
+                  <ul className="space-y-3">
+                    {[
+                      'Instant access to all transaction data',
+                      'Dynamic sorting by bank name and fund',
+                      'Chronological sorting by date',
+                      'Categorized sorting by account code',
+                      'Real-time data synchronization'
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                        <span className="text-gray-600 leading-snug">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 mt-6 group-hover:bg-emerald-50 transition-colors">
+                  <p className="text-sm font-medium text-emerald-900 text-center">
+                    Advanced reporting capabilities for better decision making.
+                  </p>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -125,29 +158,50 @@ export default function Home() {
       </section>
 
       {/* Demo Credentials Section */}
-      <section className="bg-emerald-600 py-20">
-        <div className="w-full px-6">
-          <h2 className="text-3xl font-bold text-white text-center mb-12">Try It Now</h2>
-          <div className="grid md:grid-cols-2 gap-8">
+      <section className="bg-emerald-950 py-24 relative overflow-hidden">
+        {/* Abstract background elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-800/40 rounded-full blur-3xl opacity-50" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl opacity-50" />
+        </div>
+
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-16 space-y-4">
+            <h2 className="text-4xl font-extrabold text-white tracking-tight">
+              Try It Now
+            </h2>
+            <p className="text-lg text-emerald-200/80 max-w-2xl mx-auto">
+              Experience the platform using our pre-configured demo accounts. No registration required.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-10">
             {/* Entry User Demo */}
-            <Card className="border-0 shadow-xl">
-              <CardHeader>
-                <CardTitle className="text-emerald-900">Data Entry User</CardTitle>
-                <CardDescription>Input transaction data</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Email:</p>
-                    <p className="text-lg font-mono text-gray-900">entry@demo.com</p>
+            <Card className="border border-emerald-800/50 bg-white/5 backdrop-blur-md shadow-2xl overflow-hidden hover:bg-white/10 transition-colors duration-300">
+              <CardHeader className="pb-4 pt-8 px-8 border-b border-white/10">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-400/20">
+                    <UserCircle2 className="w-6 h-6 text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Password:</p>
-                    <p className="text-lg font-mono text-gray-900">Demo123456!</p>
+                    <CardTitle className="text-2xl text-white font-bold">Data Entry User</CardTitle>
+                    <CardDescription className="text-emerald-200/70 mt-1">Input transaction data</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="px-8 pb-8 pt-6 space-y-6">
+                <div className="bg-black/20 rounded-xl p-6 space-y-4 border border-white/5 font-mono">
+                  <div className="space-y-1">
+                    <p className="text-xs text-emerald-400/70 uppercase tracking-widest font-sans font-semibold">Email</p>
+                    <p className="text-lg text-white font-medium select-all">entry@demo.com</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs text-emerald-400/70 uppercase tracking-widest font-sans font-semibold">Password</p>
+                    <p className="text-lg text-white font-medium select-all">Demo123456!</p>
                   </div>
                 </div>
                 <Link href="/auth/login" className="block">
-                  <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+                  <Button className="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-semibold h-12 text-base transition-colors duration-300">
                     Login as Entry User
                   </Button>
                 </Link>
@@ -155,24 +209,31 @@ export default function Home() {
             </Card>
 
             {/* Viewer User Demo */}
-            <Card className="border-0 shadow-xl">
-              <CardHeader>
-                <CardTitle className="text-emerald-900">Viewer User</CardTitle>
-                <CardDescription>Access and report on data</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Email:</p>
-                    <p className="text-lg font-mono text-gray-900">viewer@demo</p>
+            <Card className="border border-emerald-800/50 bg-white/5 backdrop-blur-md shadow-2xl overflow-hidden hover:bg-white/10 transition-colors duration-300">
+              <CardHeader className="pb-4 pt-8 px-8 border-b border-white/10">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-400/20">
+                    <MonitorCheck className="w-6 h-6 text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Password:</p>
-                    <p className="text-lg font-mono text-gray-900">Demo123456!</p>
+                    <CardTitle className="text-2xl text-white font-bold">Viewer User</CardTitle>
+                    <CardDescription className="text-emerald-200/70 mt-1">Access and report on data</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="px-8 pb-8 pt-6 space-y-6">
+                <div className="bg-black/20 rounded-xl p-6 space-y-4 border border-white/5 font-mono">
+                  <div className="space-y-1">
+                    <p className="text-xs text-emerald-400/70 uppercase tracking-widest font-sans font-semibold">Email</p>
+                    <p className="text-lg text-white font-medium select-all">viewer@demo</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs text-emerald-400/70 uppercase tracking-widest font-sans font-semibold">Password</p>
+                    <p className="text-lg text-white font-medium select-all">Demo123456!</p>
                   </div>
                 </div>
                 <Link href="/auth/login" className="block">
-                  <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+                  <Button className="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-semibold h-12 text-base transition-colors duration-300">
                     Login as Viewer User
                   </Button>
                 </Link>
