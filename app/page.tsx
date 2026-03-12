@@ -4,9 +4,35 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowRight, Lock, Eye, FileText, CheckCircle2, UserCircle2, MonitorCheck } from 'lucide-react'
 
+function Confetti() {
+  return (
+    <div className="absolute inset-0 z-10 pointer-events-none">
+      <div className="confetti-particle bg-red-400" style={{ '--dx': '30px', '--dy': '-40px' } as any}></div>
+      <div className="confetti-particle bg-blue-400" style={{ '--dx': '-35px', '--dy': '-20px' } as any}></div>
+      <div className="confetti-particle bg-yellow-400" style={{ '--dx': '20px', '--dy': '35px' } as any}></div>
+      <div className="confetti-particle bg-emerald-400" style={{ '--dx': '-25px', '--dy': '25px' } as any}></div>
+      <div className="confetti-particle bg-pink-400" style={{ '--dx': '10px', '--dy': '-45px' } as any}></div>
+      <div className="confetti-particle bg-purple-400" style={{ '--dx': '-10px', '--dy': '40px' } as any}></div>
+    </div>
+  )
+}
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#f9f6f0]">
+    <div className="min-h-screen bg-[#f9f6f0] relative">
+
+      {/* Global Watermark */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden flex flex-col justify-around z-0 opacity-[0.03]">
+        <div className="animate-watermark text-[8rem] font-black text-emerald-950 select-none">
+          {'TRANSACTION HUB • '.repeat(10)}
+        </div>
+        <div className="animate-watermark-reverse text-[8rem] font-black text-emerald-950 select-none">
+          {'CHECKS ISSUED REPORTS • '.repeat(10)}
+        </div>
+        <div className="animate-watermark text-[8rem] font-black text-emerald-950 select-none">
+          {'EFFICIENT & SECURE • '.repeat(10)}
+        </div>
+      </div>
 
       {/* Navigation */}
       <nav className="border-b border-emerald-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
@@ -28,20 +54,104 @@ export default function Home() {
 
             <div className="flex items-center gap-4">
 
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <Image src="/logos/logo4.png" alt="Logo 4" width={64} height={64} />
+              {/* Logo 4 */}
+              <div className="group w-16 h-16 [perspective:1000px] cursor-pointer">
+                <div className="relative w-full h-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-lg hover:shadow-2xl rounded-full hover:-translate-y-1">
+                  
+                  {/* Front Face */}
+                  <div className="absolute inset-0 w-full h-full rounded-full overflow-hidden [backface-visibility:hidden] bg-white">
+                    <Image src="/logos/logo4.png" alt="Logo 4" width={64} height={64} className="object-cover w-full h-full" />
+                  </div>
+                  
+                  {/* Back Face */}
+                  <div className="absolute inset-0 w-full h-full rounded-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-white">
+                    <Confetti />
+                    <div className="w-full h-full rounded-full overflow-hidden">
+                      <Image
+                        src="/logos/logo-back1.jpg"
+                        alt="Logo 4 Back"
+                        width={64}
+                        height={64}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <Image src="/logos/logo3.jpg" alt="Logo 3" width={64} height={64} />
+              {/* Logo 3 */}
+              <div className="group w-16 h-16 [perspective:1000px] cursor-pointer">
+                <div className="relative w-full h-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-lg hover:shadow-2xl rounded-full hover:-translate-y-1">
+                  
+                  {/* Front Face */}
+                  <div className="absolute inset-0 w-full h-full rounded-full overflow-hidden [backface-visibility:hidden] bg-white">
+                    <Image src="/logos/logo3.jpg" alt="Logo 3" width={64} height={64} className="object-cover w-full h-full" />
+                  </div>
+                  
+                  {/* Back Face */}
+                  <div className="absolute inset-0 w-full h-full rounded-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-white">
+                    <Confetti />
+                    <div className="w-full h-full rounded-full overflow-hidden">
+                      <Image
+                        src="/logos/logo-back2.jpg"
+                        alt="Logo 3 Back"
+                        width={64}
+                        height={64}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <Image src="/logos/logo1.jpg" alt="Logo 1" width={64} height={64} />
+              {/* Logo 1 */}
+              <div className="group w-16 h-16 [perspective:1000px] cursor-pointer">
+                <div className="relative w-full h-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-lg hover:shadow-2xl rounded-full hover:-translate-y-1">
+                  
+                  {/* Front Face */}
+                  <div className="absolute inset-0 w-full h-full rounded-full overflow-hidden [backface-visibility:hidden] bg-white">
+                    <Image src="/logos/logo1.jpg" alt="Logo 1" width={64} height={64} className="object-cover w-full h-full" />
+                  </div>
+                  
+                  {/* Back Face */}
+                  <div className="absolute inset-0 w-full h-full rounded-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-white">
+                    <Confetti />
+                    <div className="w-full h-full rounded-full overflow-hidden">
+                      <Image
+                        src="/logos/logo-back3.jpg"
+                        alt="Logo 1 Back"
+                        width={64}
+                        height={64}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="w-16 h-16 rounded-full bg-white shadow-lg flex hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 items-center justify-center overflow-hidden">
-                <Image src="/logos/logo2.png" alt="Logo 2" width={100} height={100} className="object-contain" />
+              {/* Logo 2 */}
+              <div className="group w-16 h-16 [perspective:1000px] cursor-pointer">
+                <div className="relative w-full h-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-lg hover:shadow-2xl rounded-full hover:-translate-y-1">
+
+                  {/* Front Face */}
+                  <div className="absolute inset-0 w-full h-full rounded-full overflow-hidden [backface-visibility:hidden] bg-white flex items-center justify-center">
+                    <Image src="/logos/logo2.png" alt="Logo 2" width={100} height={100} className="object-contain" />
+                  </div>
+
+                  {/* Back Face */}
+                  <div className="absolute inset-0 w-full h-full rounded-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-white">
+                    <Confetti />
+                    <div className="w-full h-full rounded-full overflow-hidden">
+                      <Image
+                        src="/logos/logo-back4.jpg"
+                        alt="Logo 2 Back"
+                        width={64}
+                        height={64}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -77,10 +187,13 @@ export default function Home() {
             Track, review, and manage all checked and issued items in one place. Generate accurate reports and monitor transaction history with real-time updates.
           </p>
 
-          <Link href="/auth/login" className="inline-block">
-            <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 px-8 py-6 text-base font-semibold shadow-md">
-              Login Now <ArrowRight className="w-5 h-5" />
-            </Button>
+          <Link href="/auth/login" className="inline-block mt-4">
+            <div className="relative inline-flex overflow-hidden rounded-[16px] p-[3px] shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_25px_rgba(52,211,153,0.5)] transition-shadow">
+              <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_30%,#10b981_70%,#a7f3d0_100%)]" />
+              <span className="relative inline-flex h-full w-full items-center justify-center rounded-[13px] bg-emerald-600 hover:bg-emerald-700 text-white gap-2 px-8 py-4 text-lg font-bold transition-colors">
+                Login Now <ArrowRight className="w-5 h-5" />
+              </span>
+            </div>
           </Link>
 
         </div>
