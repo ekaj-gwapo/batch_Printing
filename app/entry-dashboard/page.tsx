@@ -174,7 +174,7 @@ export default function EntryDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f9f6f0]">
       {/* Header */}
       <div className="bg-white border-b border-emerald-100 sticky top-0 z-40">
         <div className="w-full px-6 py-4 flex justify-between items-center">
@@ -215,7 +215,7 @@ export default function EntryDashboard() {
 
         {/* Transaction Form */}
         {showForm && (
-          <Card className="mb-8 border-emerald-200">
+          <Card className="mb-8 border-emerald-200 shadow-md">
             <CardHeader>
               <CardTitle>New Transaction</CardTitle>
               <CardDescription>Enter transaction details</CardDescription>
@@ -247,7 +247,7 @@ export default function EntryDashboard() {
         </div>
 
         {/* Filters */}
-        <Card className="border-emerald-200">
+        <Card className="border-emerald-200 shadow-md">
           <CardHeader>
             <CardTitle className="text-lg">Filters</CardTitle>
           </CardHeader>

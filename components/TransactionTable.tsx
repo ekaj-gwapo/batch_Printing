@@ -157,11 +157,11 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
   return (
     <div className="flex gap-6 h-full">
       {/* Table */}
-      <div className="flex-1 bg-white border border-emerald-100 rounded-lg overflow-hidden">
+      <div className="flex-1 bg-white border border-emerald-100 rounded-lg overflow-hidden shadow-sm">
         <div className="overflow-y-auto max-h-[600px]">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-emerald-100 bg-emerald-50 sticky top-0">
+              <tr className="border-b border-emerald-100 bg-emerald-100 sticky top-0">
                 <SortableHeader label="Date" field="date" />
                 <SortableHeader label="Check No." field="checkNumber" />
                 <SortableHeader label="DV #" field="dvNumber" />
@@ -188,7 +188,7 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                       ? 'bg-emerald-100'
                       : idx % 2 === 0
                         ? 'bg-white hover:bg-emerald-50'
-                        : 'bg-emerald-50/30 hover:bg-emerald-50'
+                        : 'bg-[#f9f6f0] hover:bg-emerald-50'
                   }`}
                 >
                   <td className="px-6 py-3 text-sm text-gray-900">{new Date(tx.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}</td>
@@ -211,7 +211,7 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
 
       {/* Details Panel */}
       {selectedTransaction && (
-        <div className="w-96 bg-white border border-emerald-100 rounded-lg p-6 h-[600px] overflow-y-auto flex flex-col">
+        <div className="w-96 bg-white border border-emerald-100 rounded-lg p-6 h-[600px] overflow-y-auto flex flex-col shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold text-gray-900">
               {isEditing ? 'Edit Transaction' : 'Transaction Details'}

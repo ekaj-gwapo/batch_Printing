@@ -6,7 +6,7 @@ import { ArrowRight, Lock, Eye, FileText } from 'lucide-react'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-emerald-50 to-white">
+    <div className="min-h-screen bg-[#f9f6f0]">
       {/* Navigation */}
       <nav className="border-b border-emerald-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="w-full px-8 py-6 flex justify-between items-center">

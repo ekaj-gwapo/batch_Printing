@@ -55,7 +55,11 @@ return (
   <div className="text-center mt-6">
     <p className="font-bold text-base leading-tight">REPORT OF</p>
     <p className="font-bold text-base leading-tight">CHECKS ISSUED</p>
-    <p className="font-bold text-sm mt-1">{new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase()}</p>
+    <p className="font-bold text-sm mt-1">
+      {transactions.length > 0 
+        ? new Date(transactions[0].date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase() 
+        : new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase()}
+    </p>
   </div>
 </div>
 
@@ -184,9 +188,9 @@ No transactions to display
 
 <tr>
 
-<td colSpan={7} className="border border-black p-1 text-right font-bold">
+<td colSpan={7} className="border border-black p-1 text-right font-bold pr-10">
 
-
+TOTAL
 
 </td>
 
@@ -200,45 +204,65 @@ No transactions to display
 
 </tr>
 
+<tr>
+
+<td colSpan={7} className="border border-black p-2 align-top">
+
+<p className="font-bold mb-1">CERTIFICATION</p>
+
+<p className="mb-4 text-justify">
+
+I CERTIFY that this report issued in ______ sheet(s), is a full, true and correct statement of all checks released by me in payment for obligations of the ______________________ for the period stated and shown in the attached disbursement vouchers.
+
+</p>
+
+<div className="mt-8 flex justify-between pr-16 pl-6 mb-2">
+
+<div className="text-left">
+
+<p className="font-bold">GENES T. VICENTE</p>
+
+<p className="mb-6">Acting Cashier / Supervising Admin. Officer</p>
+
+<div className="border-b border-black w-64"></div>
+
+</div>
+
+<div className="text-center flex flex-col justify-end">
+
+<p className="mb-6">Date</p>
+
+<div className="border-b border-black w-40"></div>
+
+</div>
+
+</div>
+
+</td>
+
+<td colSpan={2} className="border border-black p-2 align-top text-center">
+
+<p className="font-bold mb-0">Received By:</p>
+
+<p className="text-[10px] mb-0">(Signature over Printed Name)</p>
+
+<p className="mb-8">Date</p>
+
+<div className="flex flex-col items-center gap-6 mt-4 pb-2">
+
+<div className="border-b border-black w-4/5"></div>
+
+<div className="border-b border-black w-4/5"></div>
+
+</div>
+
+</td>
+
+</tr>
+
 </tfoot>
 
 </table>
-
-{/* FOOTER */}
-
-<div className="grid grid-cols-3 gap-10 text-center mt-16">
-
-<div>
-
-<div className="border-b border-black h-10"></div>
-
-<p className="mt-2 font-semibold">Prepared By</p>
-
-<p>{entryUserEmail}</p>
-
-</div>
-
-<div>
-
-<div className="border-b border-black h-10"></div>
-
-<p className="mt-2 font-semibold">Reviewed By</p>
-
-<p>Checker</p>
-
-</div>
-
-<div>
-
-<div className="border-b border-black h-10"></div>
-
-<p className="mt-2 font-semibold">Approved By</p>
-
-<p>Provincial Treasurer</p>
-
-</div>
-
-</div>
 
 {/* BATCH INFO */}
 

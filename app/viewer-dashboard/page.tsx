@@ -152,7 +152,7 @@ export default function ViewerDashboard() {
       )
     }
 
-    if (selectedBankName) {
+    if (selectedBankName && selectedBankName !== 'none') {
       filtered = filtered.filter(tx => tx.bankName === selectedBankName)
     }
 
@@ -162,11 +162,11 @@ export default function ViewerDashboard() {
       )
     }
 
-    if (selectedFund) {
+    if (selectedFund && selectedFund !== 'none') {
       filtered = filtered.filter(tx => tx.fund === selectedFund)
     }
 
-    if (selectedPlace) {
+    if (selectedPlace && selectedPlace !== 'none') {
       filtered = filtered.filter(tx => tx.fund === selectedPlace)
     }
 
@@ -252,7 +252,7 @@ export default function ViewerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 print:bg-white">
+    <div className="min-h-screen bg-[#f9f6f0] print:bg-white">
       {/* Header - Hidden on Print */}
       <div className="bg-white border-b border-emerald-100 sticky top-0 z-40 print:hidden">
         <div className="w-full px-6 py-4 flex justify-between items-center">
@@ -290,7 +290,7 @@ export default function ViewerDashboard() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-lg p-6 mb-8 border border-emerald-100">
+        <div className="bg-white rounded-lg p-6 mb-8 border border-emerald-100 shadow-md">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -413,7 +413,7 @@ export default function ViewerDashboard() {
           logo={null}
           entryUserEmail={selectedEntryUserEmail}
           batchId={batchId || undefined}
-          fund={selectedFund}
+          fund={selectedPlace && selectedPlace !== 'none' ? `MOPH - ${selectedPlace}` : selectedFund}
           bankName={selectedBankName}
         />
       </div>

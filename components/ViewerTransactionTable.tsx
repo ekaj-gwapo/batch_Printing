@@ -85,7 +85,7 @@ export default function ViewerTransactionTable({
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-emerald-100 bg-emerald-50 sticky top-0">
+            <tr className="border-b border-emerald-100 bg-emerald-100 sticky top-0">
               <SortableHeader label="Date" field="date" />
               <SortableHeader label="Check No." field="checkNumber" />
               <SortableHeader label="DV #" field="dvNumber" />
@@ -107,7 +107,7 @@ export default function ViewerTransactionTable({
               <tr
                 key={tx.id}
                 className={`border-b border-emerald-100 hover:bg-emerald-50 transition-colors ${
-                  idx % 2 === 0 ? 'bg-white' : 'bg-emerald-50/30'
+                  idx % 2 === 0 ? 'bg-white' : 'bg-[#f9f6f0]'
                 }`}
               >
                 <td className="px-4 py-3 text-sm text-gray-900 font-medium whitespace-nowrap">
