@@ -44,7 +44,7 @@ return (
 
 <div className="flex flex-col items-center mb-6 relative">
   <div className="flex items-center justify-center gap-4 w-full">
-    <img src="/logos/logo4.png" alt="Logo" className="w-16 h-16 object-contain" />
+    <img src="/logos/logo3.jpg" alt="Logo" className="w-16 h-16 object-contain" />
     <div className="text-center leading-tight">
       <p>Republic of the Philippines</p>
       <p className="font-bold uppercase">PROVINCIAL GOVERNMENT OF MISAMIS ORIENTAL</p>
@@ -82,7 +82,7 @@ return (
 <table className="w-full border border-black border-collapse">
 
 <thead>
-  <tr className="bg-gray-50 text-center">
+  <tr className="bg-blue-50 text-center">
     <th className="border border-black p-1 font-normal" colSpan={2}>Check</th>
     <th className="border border-black p-1 font-normal" rowSpan={2}>DV<br/>No.</th>
     <th className="border border-black p-1 font-normal" rowSpan={2}>Account<br/>Code</th>
