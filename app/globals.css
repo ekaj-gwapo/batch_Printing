@@ -127,7 +127,7 @@
 @media print {
   @page {
     margin: 0.5cm;
-    size: portrait;
+    size: landscape;
   }
   body,
   html {

@@ -87,18 +87,19 @@ return (
 
 <thead>
   <tr className="bg-blue-50 text-center">
-    <th className="border border-black p-1 font-normal" colSpan={2}>Check</th>
-    <th className="border border-black p-1 font-normal" rowSpan={2}>DV<br/>No.</th>
-    <th className="border border-black p-1 font-normal" rowSpan={2}>Account<br/>Code</th>
-    <th className="border border-black p-1 font-normal" rowSpan={2}>Resp.<br/>Center</th>
+    <th className="border border-black p-1 font-normal w-[130px]" colSpan={2}>Check</th>
+    <th className="border border-black p-1 font-normal w-[50px]" rowSpan={2}>DV<br/>No.</th>
+    <th className="border border-black p-1 font-normal w-[50px]" rowSpan={2}>Control<br/>No.</th>
+    <th className="border border-black p-1 font-normal w-[60px]" rowSpan={2}>Account<br/>Code</th>
+    <th className="border border-black p-1 font-normal w-[60px]" rowSpan={2}>Resp.<br/>Center</th>
     <th className="border border-black p-1 font-normal" rowSpan={2}>Name of<br/>Payee</th>
-    <th className="border border-black p-1 font-normal" rowSpan={2}>Nature of Payment</th>
-    <th className="border border-black p-1 font-normal" rowSpan={2}>Amount</th>
-    <th className="border border-black p-1 font-normal" rowSpan={2}>Remarks</th>
+    <th className="border border-black p-1 font-normal min-w-[150px]" rowSpan={2}>Nature of Payment</th>
+    <th className="border border-black p-1 font-normal w-[80px]" rowSpan={2}>Amount</th>
+    <th className="border border-black p-1 font-normal w-[60px]" rowSpan={2}>Remarks</th>
   </tr>
   <tr className="bg-gray-50 text-center">
-    <th className="border border-black p-1 font-normal">Date</th>
-    <th className="border border-black p-1 font-normal">No.</th>
+    <th className="border border-black p-1 font-normal w-[80px]">Date</th>
+    <th className="border border-black p-1 font-normal w-[50px]">No.</th>
   </tr>
 </thead>
 
@@ -130,6 +131,12 @@ transactions.map((t) => (
 
 <td className="border border-black p-1 text-center">
 
+{t.controlNumber}
+
+</td>
+
+<td className="border border-black p-1 text-center">
+
 {t.accountCode}
 
 </td>
@@ -140,7 +147,7 @@ transactions.map((t) => (
 
 </td>
 
-<td className="border border-black p-1">
+<td className="border border-black p-1 whitespace-nowrap">
 
 {t.payee}
 
@@ -188,7 +195,7 @@ No transactions to display
 
 <tr>
 
-<td colSpan={7} className="border border-black p-1 text-right font-bold pr-10">
+<td colSpan={8} className="border border-black p-1 text-right font-bold pr-10">
 
 TOTAL
 
@@ -206,7 +213,7 @@ TOTAL
 
 <tr>
 
-<td colSpan={7} className="border border-black p-2 align-top">
+<td colSpan={6} className="border border-black p-2 align-top">
 
 <p className="font-bold mb-1">CERTIFICATION</p>
 
@@ -240,20 +247,22 @@ I CERTIFY that this report issued in ______ sheet(s), is a full, true and correc
 
 </td>
 
-<td colSpan={2} className="border border-black p-2 align-top text-center">
+<td colSpan={3} className="border border-black p-2 align-top text-center relative overflow-hidden">
 
+<div className="min-w-[200px] sm:min-w-[250px] w-full flex flex-col h-full">
 <p className="font-bold mb-0">Received By:</p>
 
-<p className="text-[10px] mb-0">(Signature over Printed Name)</p>
+<p className="text-[10px] mb-0 whitespace-nowrap">(Signature over Printed Name)</p>
 
 <p className="mb-8">Date</p>
 
-<div className="flex flex-col items-center gap-6 mt-4 pb-2">
+<div className="flex flex-col items-center gap-6 mt-auto pb-2">
+
+<div className="border-b border-black w-4/5 pt-4"></div>
 
 <div className="border-b border-black w-4/5"></div>
 
-<div className="border-b border-black w-4/5"></div>
-
+</div>
 </div>
 
 </td>

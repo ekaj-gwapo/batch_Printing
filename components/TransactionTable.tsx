@@ -165,6 +165,7 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                 <SortableHeader label="Date" field="date" />
                 <SortableHeader label="Check No." field="checkNumber" />
                 <SortableHeader label="DV #" field="dvNumber" />
+                <SortableHeader label="Control No." field="controlNumber" />
                 <SortableHeader label="Account Code" field="accountCode" />
                 <th className="px-6 py-3 text-sm font-semibold text-emerald-900">Responsibility Center</th>
                 <SortableHeader label="Payee" field="payee" />
@@ -194,9 +195,10 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                   <td className="px-6 py-3 text-sm text-gray-900">{new Date(tx.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}</td>
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.checkNumber || '-'}</td>
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.dvNumber}</td>
+                  <td className="px-6 py-3 text-sm text-gray-900">{tx.controlNumber}</td>
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.accountCode}</td>
                   <td className="px-6 py-3 text-sm text-gray-900">{tx.responsibilityCenter || '-'}</td>
-                  <td className="px-6 py-3 text-sm text-gray-900">{tx.payee}</td>
+                  <td className="px-6 py-3 text-sm text-gray-900 whitespace-nowrap">{tx.payee}</td>
                   <td className="px-6 py-3 text-sm text-gray-900 max-w-xs truncate">{tx.particulars}</td>
                   <td className="px-6 py-3 text-sm text-right text-gray-900 font-medium">
                     ${tx.amount.toFixed(2)}
