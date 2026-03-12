@@ -71,6 +71,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
       const selectedFund = formData.moph_location || formData.fund
 
       if (!selectedFund) throw new Error('Please select either a Fund or MOPH location')
+      if (!formData.check_number.trim()) throw new Error('Check number is required')
 
       const payload = JSON.stringify({
         bankName: formData.bank_name,
@@ -191,6 +192,7 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
             name="check_number"
             value={formData.check_number}
             onChange={handleChange}
+            required
             placeholder="Enter check number"
           />
         </div>

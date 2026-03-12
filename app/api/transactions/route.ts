@@ -67,6 +67,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+    if (!body.checkNumber || body.checkNumber.trim() === '') {
+      return NextResponse.json(
+        { error: 'Check Number is required' },
+        { status: 400 }
+      )
+    }
     if (!body.amount || isNaN(parseFloat(body.amount))) {
       return NextResponse.json(
         { error: 'Amount is required and must be a valid number' },
@@ -153,6 +159,12 @@ export async function PUT(request: NextRequest) {
     if (!body.particulars || body.particulars.trim() === '') {
       return NextResponse.json(
         { error: 'Particulars is required' },
+        { status: 400 }
+      )
+    }
+    if (!body.checkNumber || body.checkNumber.trim() === '') {
+      return NextResponse.json(
+        { error: 'Check Number is required' },
         { status: 400 }
       )
     }

@@ -112,7 +112,7 @@ export default function EntryDashboard() {
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase()
-      filtered = filtered.filter(tx => 
+      filtered = filtered.filter(tx =>
         tx.checkNumber?.toLowerCase().includes(q) ||
         tx.dvNumber?.toLowerCase().includes(q) ||
         tx.accountCode?.toLowerCase().includes(q) ||
@@ -203,7 +203,7 @@ export default function EntryDashboard() {
 
       {/* Main Content */}
       <div className="w-full px-6 py-8 flex flex-col gap-8">
-        
+
 
         {/* Transaction Form */}
         {showForm && (
@@ -230,7 +230,7 @@ export default function EntryDashboard() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <Input
               type="text"
-              placeholder="Search by check no, dv no, account code, resp center, payee, amount..."
+              placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 w-full border-emerald-200 focus-visible:ring-emerald-600 bg-white"
@@ -254,6 +254,9 @@ export default function EntryDashboard() {
                   className="w-full rounded-lg border border-emerald-200 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
                 >
                   <option value="">All Bank Names</option>
+                  {selectedBankName && !bankNames.includes(selectedBankName) && (
+                    <option value={selectedBankName}>{selectedBankName}</option>
+                  )}
                   {bankNames.map(name => (
                     <option key={name} value={name}>{name}</option>
                   ))}
@@ -292,6 +295,9 @@ export default function EntryDashboard() {
                   className="w-full rounded-lg border border-emerald-200 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
                 >
                   <option value="">All Locations</option>
+                  {selectedPlace && !places.includes(selectedPlace) && (
+                    <option value={selectedPlace}>{selectedPlace}</option>
+                  )}
                   {places.map(place => (
                     <option key={place} value={place}>{place}</option>
                   ))}
@@ -316,19 +322,19 @@ export default function EntryDashboard() {
         </Card>
 
         {/* Transactions Header */}
-<div className="flex justify-between items-center mb-4">
-  <h2 className="text-2xl font-bold text-gray-900">Transactions</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-gray-900">Transactions</h2>
 
-  <Button
-    onClick={() => setShowForm(!showForm)}
-    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-2"
-  >
-    <Plus className="w-4 h-4" />
-    {showForm ? 'Hide Form' : 'Add Transaction'}
-  </Button>
-</div>
+          <Button
+            onClick={() => setShowForm(!showForm)}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            {showForm ? 'Hide Form' : 'Add Transaction'}
+          </Button>
+        </div>
 
-        
+
 
         {/* Transaction Table */}
         <TransactionTable

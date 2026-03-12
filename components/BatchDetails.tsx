@@ -53,21 +53,21 @@ export default function BatchDetails({
   const [isRestoring, setIsRestoring] = useState(false)
   const [restoreConfirm, setRestoreConfirm] = useState(false)
 
-  useEffect(() => {
-    const fetchBatchDetails = async () => {
-      try {
-        setIsLoading(true)
-        const response = await fetch(`/api/batches/${batch.id}`)
-        if (!response.ok) throw new Error('Failed to fetch batch details')
-        const data = await response.json()
-        setTransactions(data.transactions)
-      } catch (error) {
-        console.error('Error fetching batch details:', error)
-      } finally {
-        setIsLoading(false)
-      }
+  const fetchBatchDetails = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch(`/api/batches/${batch.id}`)
+      if (!response.ok) throw new Error('Failed to fetch batch details')
+      const data = await response.json()
+      setTransactions(data.transactions)
+    } catch (error) {
+      console.error('Error fetching batch details:', error)
+    } finally {
+      setIsLoading(false)
     }
+  }
 
+  useEffect(() => {
     fetchBatchDetails()
   }, [batch.id])
 
@@ -113,7 +113,14 @@ export default function BatchDetails({
       )
       setSelectedTransactions(new Set())
       setRestoreConfirm(false)
+      
       onRestoreSuccess()
+      
+      if (result.batchDeleted) {
+        onBack() // Redirect back to batches list
+      } else {
+        fetchBatchDetails() // Refresh remaining transactions
+      }
     } catch (error) {
       console.error('Error restoring transactions:', error)
       alert('Failed to restore transactions. Please try again.')

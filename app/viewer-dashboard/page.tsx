@@ -56,7 +56,7 @@ export default function ViewerDashboard() {
     'Development Fund',
     'Trust Fund',
     'Hospital Fund',
-    
+
   ]
 
   useEffect(() => {
@@ -131,10 +131,10 @@ export default function ViewerDashboard() {
 
   const applyFilters = (data: Transaction[]) => {
     let filtered = [...data]
-    
+
     if (searchQuery) {
       const q = searchQuery.toLowerCase()
-      filtered = filtered.filter(tx => 
+      filtered = filtered.filter(tx =>
         tx.checkNumber?.toLowerCase().includes(q) ||
         tx.dvNumber?.toLowerCase().includes(q) ||
         tx.accountCode?.toLowerCase().includes(q) ||
@@ -143,13 +143,13 @@ export default function ViewerDashboard() {
         tx.amount?.toString().includes(q)
       )
     }
-    
+
     if (selectedBankName) {
       filtered = filtered.filter(tx => tx.bankName === selectedBankName)
     }
-    
+
     if (selectedDate) {
-      filtered = filtered.filter(tx => 
+      filtered = filtered.filter(tx =>
         new Date(tx.date).toLocaleDateString() === new Date(selectedDate).toLocaleDateString()
       )
     }
@@ -273,7 +273,7 @@ export default function ViewerDashboard() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <Input
               type="text"
-              placeholder="Search by check no, dv no, account code, resp center, payee, amount..."
+              placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 w-full border-emerald-200 focus-visible:ring-emerald-600 bg-white"
@@ -295,6 +295,9 @@ export default function ViewerDashboard() {
                   className="w-full appearance-none rounded-lg border border-emerald-200 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600 pr-10"
                 >
                   <option value="">All Bank Names</option>
+                  {selectedBankName && !bankNames.includes(selectedBankName) && (
+                    <option value={selectedBankName}>{selectedBankName}</option>
+                  )}
                   {bankNames.map(name => (
                     <option key={name} value={name}>{name}</option>
                   ))}
@@ -342,6 +345,9 @@ export default function ViewerDashboard() {
                   className="w-full appearance-none rounded-lg border border-emerald-200 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600 pr-10"
                 >
                   <option value="">All Locations</option>
+                  {selectedPlace && !places.includes(selectedPlace) && (
+                    <option value={selectedPlace}>{selectedPlace}</option>
+                  )}
                   {places.map(place => (
                     <option key={place} value={place}>{place}</option>
                   ))}
