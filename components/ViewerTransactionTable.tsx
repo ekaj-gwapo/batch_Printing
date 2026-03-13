@@ -38,11 +38,23 @@ export default function ViewerTransactionTable({
 
   const sortedTransactions = useMemo(() => {
     const sorted = [...transactions].sort((a, b) => {
-      const aVal = a[sortField]
-      const bVal = b[sortField]
+      let aVal = a[sortField]
+      let bVal = b[sortField]
+
+      // For date sorting, only consider Month and Year (ignore day)
+      if (sortField === 'date') {
+        const dateA = new Date(aVal as string)
+        const dateB = new Date(bVal as string)
+        
+        // Zero out the day and time to only compare YYYY-MM
+        const monthYearA = new Date(dateA.getFullYear(), dateA.getMonth(), 1).getTime()
+        const monthYearB = new Date(dateB.getFullYear(), dateB.getMonth(), 1).getTime()
+        
+        return sortDirection === 'asc' ? monthYearA - monthYearB : monthYearB - monthYearA
+      }
 
       if (typeof aVal === 'string') {
-        return sortDirection === 'asc' ? aVal.localeCompare(bVal as string) : (bVal as string).localeCompare(aVal)
+        return sortDirection === 'asc' ? aVal.localeCompare(bVal as string) : (bVal as string).localeCompare(aVal as string)
       }
 
       return sortDirection === 'asc' ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number)

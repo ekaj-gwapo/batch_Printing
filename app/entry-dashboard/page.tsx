@@ -135,9 +135,12 @@ export default function EntryDashboard() {
     }
 
     if (selectedDate) {
-      filtered = filtered.filter(tx =>
-        new Date(tx.date).toLocaleDateString() === new Date(selectedDate).toLocaleDateString()
-      )
+      const filterDate = new Date(selectedDate)
+      filtered = filtered.filter(tx => {
+        const txDate = new Date(tx.date)
+        return txDate.getMonth() === filterDate.getMonth() && 
+               txDate.getFullYear() === filterDate.getFullYear()
+      })
     }
 
     if (selectedFund && selectedFund !== 'none') {
