@@ -57,12 +57,12 @@ export default function Home() {
               {/* Logo 4 */}
               <div className="group w-16 h-16 [perspective:1000px] cursor-pointer">
                 <div className="relative w-full h-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-lg hover:shadow-2xl rounded-full hover:-translate-y-1">
-                  
+
                   {/* Front Face */}
                   <div className="absolute inset-0 w-full h-full rounded-full overflow-hidden [backface-visibility:hidden] bg-white">
                     <Image src="/logos/logo4.png" alt="Logo 4" width={64} height={64} className="object-cover w-full h-full" />
                   </div>
-                  
+
                   {/* Back Face */}
                   <div className="absolute inset-0 w-full h-full rounded-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-white">
                     <Confetti />
@@ -82,12 +82,12 @@ export default function Home() {
               {/* Logo 3 */}
               <div className="group w-16 h-16 [perspective:1000px] cursor-pointer">
                 <div className="relative w-full h-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-lg hover:shadow-2xl rounded-full hover:-translate-y-1">
-                  
+
                   {/* Front Face */}
                   <div className="absolute inset-0 w-full h-full rounded-full overflow-hidden [backface-visibility:hidden] bg-white">
                     <Image src="/logos/logo3.jpg" alt="Logo 3" width={64} height={64} className="object-cover w-full h-full" />
                   </div>
-                  
+
                   {/* Back Face */}
                   <div className="absolute inset-0 w-full h-full rounded-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-white">
                     <Confetti />
@@ -107,12 +107,12 @@ export default function Home() {
               {/* Logo 1 */}
               <div className="group w-16 h-16 [perspective:1000px] cursor-pointer">
                 <div className="relative w-full h-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-lg hover:shadow-2xl rounded-full hover:-translate-y-1">
-                  
+
                   {/* Front Face */}
                   <div className="absolute inset-0 w-full h-full rounded-full overflow-hidden [backface-visibility:hidden] bg-white">
                     <Image src="/logos/logo1.jpg" alt="Logo 1" width={64} height={64} className="object-cover w-full h-full" />
                   </div>
-                  
+
                   {/* Back Face */}
                   <div className="absolute inset-0 w-full h-full rounded-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-white">
                     <Confetti />
