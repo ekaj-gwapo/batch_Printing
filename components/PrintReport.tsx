@@ -69,7 +69,11 @@ return (
   <div>
     <div className="grid grid-cols-[80px_1fr] gap-2 items-end mb-1">
       <p className="leading-tight text-gray-700">Bank<br/>Name:</p>
-      <p className="font-bold border-b border-black uppercase whitespace-nowrap">{bankName || "DEVELOPMENT BANK OF THE PHILIPPINES"}</p>
+      <p className="font-bold border-b border-black uppercase whitespace-nowrap">
+        {bankName === 'Landbank - 43' || bankName === 'Landbank - 45' 
+          ? 'LAND BANK OF THE PHILIPPINES' 
+          : (bankName || "DEVELOPMENT BANK OF THE PHILIPPINES")}
+      </p>
     </div>
     <div className="grid grid-cols-[80px_1fr] gap-2 items-end">
       <p className="leading-tight text-gray-700">Account No.:</p>

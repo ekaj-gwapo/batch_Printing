@@ -9,13 +9,15 @@ import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
 import TransactionForm from '@/components/TransactionForm'
 import TransactionTable from '@/components/TransactionTable'
-import { DatePicker } from '@/components/DatePicker'
+import { MonthYearPicker } from '@/components/MonthYearPicker'
 import { LogOut, Plus, Settings, Search } from 'lucide-react'
 import Link from 'next/link'
 
@@ -264,18 +266,36 @@ export default function EntryDashboard() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none" className="text-gray-500 italic">All Bank Names</SelectItem>
+                    
+                    {(bankNames.includes('Landbank - 43') || bankNames.includes('Landbank - 45')) && (
+                      <SelectGroup>
+                        <SelectLabel className="font-bold text-emerald-800">Landbank of the Philippines</SelectLabel>
+                        {bankNames.includes('Landbank - 43') && <SelectItem value="Landbank - 43" className="pl-6">Landbank - 43</SelectItem>}
+                        {bankNames.includes('Landbank - 45') && <SelectItem value="Landbank - 45" className="pl-6">Landbank - 45</SelectItem>}
+                      </SelectGroup>
+                    )}
+                    
+                    {bankNames.some(b => b === 'Landbank - 43' || b === 'Landbank - 45') && bankNames.some(b => b !== 'Landbank - 43' && b !== 'Landbank - 45') && (
+                      <div className="h-px bg-emerald-100 my-1 mx-2"></div>
+                    )}
+                    
+                    {bankNames.some(b => b !== 'Landbank - 43' && b !== 'Landbank - 45') && (
+                      <SelectGroup>
+                        {bankNames.filter(name => name !== 'Landbank - 43' && name !== 'Landbank - 45').map(name => (
+                          <SelectItem key={name} value={name}>{name}</SelectItem>
+                        ))}
+                      </SelectGroup>
+                    )}
+
                     {selectedBankName && selectedBankName !== 'none' && !bankNames.includes(selectedBankName) && (
                       <SelectItem value={selectedBankName}>{selectedBankName}</SelectItem>
                     )}
-                    {bankNames.map(name => (
-                      <SelectItem key={name} value={name}>{name}</SelectItem>
-                    ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
                 <Label htmlFor="date-filter" className="mb-2 block">Date</Label>
-                <DatePicker
+                <MonthYearPicker
                   value={selectedDate}
                   onChange={setSelectedDate}
                   className="w-full rounded-lg border-emerald-200 bg-white px-4 py-2 text-gray-900 focus-visible:ring-2 focus-visible:ring-emerald-600 font-normal"

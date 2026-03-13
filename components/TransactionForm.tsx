@@ -7,7 +7,9 @@ import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -22,6 +24,7 @@ type TransactionFormProps = {
 export default function TransactionForm({ userId, onSuccess }: TransactionFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isCustomBank, setIsCustomBank] = useState(false)
   const [formData, setFormData] = useState({
     bank_name: '',
     payee: '',
@@ -40,6 +43,13 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
     moph_location: '',
     responsibility_center: '',
   })
+  
+  const standardBanks = [
+    'DBP',
+    'BDO',
+    'BPI',
+    'Metrobank',
+  ]
 
   const fundOptions = [
     'General Fund',
@@ -147,16 +157,73 @@ export default function TransactionForm({ userId, onSuccess }: TransactionFormPr
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
+        <div className="flex flex-col gap-2">
           <Label htmlFor="bank_name">Bank Name *</Label>
-          <Input
-            id="bank_name"
-            name="bank_name"
-            value={formData.bank_name}
-            onChange={handleChange}
-            required
-            placeholder="Enter bank name"
-          />
+          {!isCustomBank ? (
+            <Select 
+              value={(formData.bank_name === 'Landbank - 43' || formData.bank_name === 'Landbank - 45' || standardBanks.includes(formData.bank_name)) ? formData.bank_name : (formData.bank_name ? 'custom_prefill' : '')} 
+              onValueChange={(val) => {
+                if (val === 'add_new') {
+                  setIsCustomBank(true)
+                  setFormData(prev => ({ ...prev, bank_name: '' }))
+                } else if (val === 'custom_prefill') {
+                  // Do nothing, just a display placeholder if preexisting data doesn't match
+                } else {
+                  setFormData(prev => {
+                    const updates = { ...prev, bank_name: val }
+                    if (val === 'Landbank - 43' && !prev.check_number) updates.check_number = '43'
+                    if (val === 'Landbank - 45' && !prev.check_number) updates.check_number = '45'
+                    return updates
+                  })
+                }
+              }}
+            >
+              <SelectTrigger id="bank_name" className="w-full bg-background" aria-required="true">
+                <SelectValue placeholder="Select a bank" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel className="font-bold text-emerald-800">Landbank of the Philippines</SelectLabel>
+                  <SelectItem value="Landbank - 43" className="pl-6">Landbank - 43</SelectItem>
+                  <SelectItem value="Landbank - 45" className="pl-6">Landbank - 45</SelectItem>
+                </SelectGroup>
+                <div className="h-px bg-emerald-100 my-1 mx-2"></div>
+                <SelectGroup>
+                  {standardBanks.map(option => (
+                    <SelectItem key={option} value={option}>{option}</SelectItem>
+                  ))}
+                </SelectGroup>
+                {formData.bank_name && formData.bank_name !== 'Landbank - 43' && formData.bank_name !== 'Landbank - 45' && !standardBanks.includes(formData.bank_name) && (
+                   <SelectItem value="custom_prefill" className="hidden">{formData.bank_name}</SelectItem>
+                )}
+                <div className="h-px bg-emerald-100 my-1 mx-2"></div>
+                <SelectItem value="add_new" className="text-emerald-600 font-medium cursor-pointer">+ Add New Bank...</SelectItem>
+              </SelectContent>
+            </Select>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <Input
+                id="bank_name"
+                name="bank_name"
+                value={formData.bank_name}
+                onChange={handleChange}
+                required
+                placeholder="Enter custom bank name"
+                className="w-full"
+                autoFocus
+              />
+              <button 
+                type="button" 
+                onClick={() => {
+                  setIsCustomBank(false)
+                  setFormData(prev => ({ ...prev, bank_name: '' }))
+                }}
+                className="text-xs text-gray-500 hover:text-emerald-600 self-end px-1"
+              >
+                Return to dropdown
+              </button>
+            </div>
+          )}
         </div>
         <div>
           <Label htmlFor="payee">Payee *</Label>

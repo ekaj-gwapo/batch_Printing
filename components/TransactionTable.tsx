@@ -6,7 +6,9 @@ import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -46,6 +48,14 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [editFormData, setEditFormData] = useState<Partial<Transaction> | null>(null)
+  const [isCustomBank, setIsCustomBank] = useState(false)
+
+  const standardBanks = [
+    'DBP',
+    'BDO',
+    'BPI',
+    'Metrobank',
+  ]
 
   const sortedTransactions = useMemo(() => {
     const sorted = [...transactions].sort((a, b) => {
@@ -86,6 +96,7 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
     if (selectedTransaction) {
       setEditFormData({ ...selectedTransaction })
       setIsEditing(true)
+      setIsCustomBank(false)
     }
   }
 
@@ -235,6 +246,7 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                 setSelectedTransaction(null)
                 setIsEditing(false)
                 setEditFormData(null)
+                setIsCustomBank(false)
               }}
               className="p-1 hover:bg-gray-100 rounded"
             >
@@ -256,12 +268,70 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">Bank Name</label>
-                  <input
-                    type="text"
-                    value={editFormData.bankName || ''}
-                    onChange={(e) => handleEditChange('bankName', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
-                  />
+                  {!isCustomBank ? (
+                    <Select 
+                      value={(editFormData.bankName === 'Landbank - 43' || editFormData.bankName === 'Landbank - 45' || standardBanks.includes(editFormData.bankName as string)) ? editFormData.bankName as string : (editFormData.bankName ? 'custom_prefill' : '')} 
+                      onValueChange={(val) => {
+                        if (val === 'add_new') {
+                          setIsCustomBank(true)
+                          handleEditChange('bankName', '')
+                        } else if (val === 'custom_prefill') {
+                          // Do nothing
+                        } else {
+                          handleEditChange('bankName', val)
+                          if (val === 'Landbank - 43' && !(editFormData as any).checkNumber) {
+                            handleEditChange('checkNumber' as any, '43')
+                          }
+                          if (val === 'Landbank - 45' && !(editFormData as any).checkNumber) {
+                            handleEditChange('checkNumber' as any, '45')
+                          }
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="w-full h-8 text-sm bg-white">
+                        <SelectValue placeholder="Select a bank" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel className="font-bold text-emerald-800">Landbank of the Philippines</SelectLabel>
+                          <SelectItem value="Landbank - 43" className="pl-6">Landbank - 43</SelectItem>
+                          <SelectItem value="Landbank - 45" className="pl-6">Landbank - 45</SelectItem>
+                        </SelectGroup>
+                        <div className="h-px bg-emerald-100 my-1 mx-2"></div>
+                        <SelectGroup>
+                          {standardBanks.map(option => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                          ))}
+                        </SelectGroup>
+                        {editFormData.bankName && editFormData.bankName !== 'Landbank - 43' && editFormData.bankName !== 'Landbank - 45' && !standardBanks.includes(editFormData.bankName as string) && (
+                           <SelectItem value="custom_prefill" className="hidden">{editFormData.bankName}</SelectItem>
+                        )}
+                        <div className="h-px bg-emerald-100 my-1 mx-2"></div>
+                        <SelectItem value="add_new" className="text-emerald-600 font-medium cursor-pointer">+ Add New Bank...</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <div className="flex flex-col gap-1 mt-1">
+                      <input
+                        type="text"
+                        value={editFormData.bankName || ''}
+                        onChange={(e) => handleEditChange('bankName', e.target.value)}
+                        placeholder="Enter custom bank name"
+                        className="w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
+                        autoFocus
+                      />
+                      <button 
+                        type="button" 
+                        onClick={() => {
+                          setIsCustomBank(false)
+                          handleEditChange('bankName', '')
+                        }}
+                        className="text-xs text-gray-500 hover:text-emerald-600 self-end"
+                      >
+                        Return to dropdown
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-emerald-600 uppercase">Payee</label>
