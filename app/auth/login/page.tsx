@@ -25,6 +25,7 @@ export default function LoginPage() {
   const [isEggRevealed, setIsEggRevealed] = useState(false)
   const [eggPosition, setEggPosition] = useState(50)
   const [isEggBroken, setIsEggBroken] = useState(false)
+  const [isMoving, setIsMoving] = useState(false)
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export default function LoginPage() {
 
   const handleEggHover = () => {
     if (!isEggRevealed || isEggBroken) return
+    setIsMoving(true)
     // Move egg to a random position between 10% and 90%
     let newPos = Math.floor(Math.random() * 80) + 10
     // Ensure it moves a decent distance from the current position
@@ -137,17 +139,47 @@ export default function LoginPage() {
       <div className="w-full max-w-sm relative">
         {/* Egg Element */}
         <div
-          className={`absolute text-4xl cursor-pointer select-none z-0 ${isEggRevealed && !isEggBroken ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          className={`absolute flex flex-col items-center cursor-pointer select-none z-0 ${isEggRevealed && !isEggBroken ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
           style={{
-            top: isEggRevealed ? '-36px' : '20px',
+            bottom: isEggRevealed ? 'calc(100% + 4px)' : '20%',
             left: `${eggPosition}%`,
-            transform: 'translateX(-50%)',
-            transition: 'top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), left 0.8s ease-out, opacity 0.2s ease-in-out',
+            transform: `translateX(-50%) translateY(${isMoving ? '-15px' : '0px'})`,
+            transition: 'bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), left 0.8s ease-out, transform 0.2s ease-out, opacity 0.2s ease-in-out',
           }}
           onMouseEnter={handleEggHover}
           onClick={handleEggClick}
+          onTransitionEnd={(e) => {
+            if (e.propertyName === 'left') {
+              setIsMoving(false)
+            }
+          }}
         >
-          🥚
+          {/* Head */}
+          <div className="w-12 h-12 rounded-full overflow-hidden z-20 relative border-[2px] border-white shadow-sm bg-white mb-[-12px]">
+            <Image
+              src="/logos/esther egg.jpg"
+              alt="Esther"
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          {/* Body */}
+          <div className="text-5xl md:text-6xl relative z-10 transition-transform duration-200 leading-[0.8]">
+            🥚
+          </div>
+
+          {/* Legs */}
+          <div
+            className="absolute bottom-[-16px] flex gap-2 z-0 pointer-events-none transition-all duration-300"
+            style={{
+              opacity: isMoving ? 1 : 0,
+              transform: isMoving ? 'translateY(0)' : 'translateY(-20px)',
+            }}
+          >
+            <div className={`w-1.5 h-6 bg-[#d4a373] rounded-full origin-top ${isMoving ? 'animate-[run_0.15s_ease-in-out_infinite_alternate]' : ''}`}></div>
+            <div className={`w-1.5 h-6 bg-[#d4a373] rounded-full origin-top delay-75 ${isMoving ? 'animate-[run_0.15s_ease-in-out_infinite_alternate-reverse]' : ''}`}></div>
+          </div>
         </div>
 
         <div className="flex flex-col gap-6 relative z-10">

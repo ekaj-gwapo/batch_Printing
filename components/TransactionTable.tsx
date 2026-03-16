@@ -39,11 +39,11 @@ type TransactionTableProps = {
   onTransactionUpdated?: () => void
 }
 
-type SortField = 'date' | 'checkNumber' | 'dvNumber' | 'accountCode' | 'payee' | 'particulars' | 'amount' | 'remarks' | 'bankName' | 'controlNumber' | 'fund'
+type SortField = 'date' | 'checkNumber' | 'dvNumber' | 'accountCode' | 'payee' | 'particulars' | 'amount' | 'remarks' | 'bankName' | 'controlNumber' | 'fund' | 'createdAt'
 
 export default function TransactionTable({ transactions, onTransactionDeleted, onTransactionUpdated }: TransactionTableProps) {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null)
-  const [sortField, setSortField] = useState<SortField>('date')
+  const [sortField, setSortField] = useState<SortField>('createdAt')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -72,6 +72,12 @@ export default function TransactionTable({ transactions, onTransactionDeleted, o
         const monthYearB = new Date(dateB.getFullYear(), dateB.getMonth(), 1).getTime()
         
         return sortDirection === 'asc' ? monthYearA - monthYearB : monthYearB - monthYearA
+      }
+
+      if (sortField === 'createdAt') {
+        const timeA = new Date(aVal as string).getTime()
+        const timeB = new Date(bVal as string).getTime()
+        return sortDirection === 'asc' ? timeA - timeB : timeB - timeA
       }
 
       if (typeof aVal === 'string') {

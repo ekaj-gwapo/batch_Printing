@@ -28,12 +28,12 @@ type ViewerTransactionTableProps = {
   transactions: Transaction[]
 }
 
-type SortField = 'date' | 'checkNumber' | 'dvNumber' | 'accountCode' | 'payee' | 'particulars' | 'amount' | 'remarks' | 'bankName' | 'controlNumber' | 'fund'
+type SortField = 'date' | 'checkNumber' | 'dvNumber' | 'accountCode' | 'payee' | 'particulars' | 'amount' | 'remarks' | 'bankName' | 'controlNumber' | 'fund' | 'createdAt'
 
 export default function ViewerTransactionTable({
   transactions,
 }: ViewerTransactionTableProps) {
-  const [sortField, setSortField] = useState<SortField>('date')
+  const [sortField, setSortField] = useState<SortField>('createdAt')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
 
   const sortedTransactions = useMemo(() => {
@@ -51,6 +51,12 @@ export default function ViewerTransactionTable({
         const monthYearB = new Date(dateB.getFullYear(), dateB.getMonth(), 1).getTime()
         
         return sortDirection === 'asc' ? monthYearA - monthYearB : monthYearB - monthYearA
+      }
+
+      if (sortField === 'createdAt') {
+        const timeA = new Date(aVal as string).getTime()
+        const timeB = new Date(bVal as string).getTime()
+        return sortDirection === 'asc' ? timeA - timeB : timeB - timeA
       }
 
       if (typeof aVal === 'string') {

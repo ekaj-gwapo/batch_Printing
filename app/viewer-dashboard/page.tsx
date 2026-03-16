@@ -17,8 +17,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { MonthYearPicker } from '@/components/MonthYearPicker'
-import { LogOut, ChevronDown, Settings, Printer, Archive, Search } from 'lucide-react'
+import { LogOut, ChevronDown, Settings, Printer, Archive, Search, Upload } from 'lucide-react'
 import Link from 'next/link'
+import * as xlsx from 'xlsx'
 
 type Transaction = {
   id: string
@@ -58,7 +59,9 @@ export default function ViewerDashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const [batchId, setBatchId] = useState<string | null>(null)
   const [isCreatingBatch, setIsCreatingBatch] = useState(false)
+  const [isImporting, setIsImporting] = useState(false)
   const printRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
   const fundOptions = [
@@ -137,6 +140,132 @@ export default function ViewerDashboard() {
         .filter(fund => !regularFunds.includes(fund))
     ))
     setPlaces(placeList.sort())
+  }
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsImporting(true)
+    try {
+      const data = await file.arrayBuffer()
+      const workbook = xlsx.read(data)
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+      const jsonData = xlsx.utils.sheet_to_json<any>(worksheet, { raw: false, dateNF: 'mm/dd/yyyy' })
+      
+      const mappedTransactions = jsonData.map((rawRow, index) => {
+        // Normalize keys to lowercase, trimming and replacing ANY whitespace (like newlines) with single space
+        const row: Record<string, any> = {}
+        for (const [key, value] of Object.entries(rawRow)) {
+           const cleanKey = key.toString().toLowerCase().replace(/[\s\r\n]+/g, ' ').trim()
+           row[cleanKey] = value
+        }
+
+        // Handle different date formats (Excel serial dates vs strings)
+        let formattedDate = ''
+        const rawDate = row['date']
+        
+        if (rawDate) {
+           formattedDate = rawDate.toString().trim()
+        }
+
+        const parseAmount = (val: any) => {
+           if (typeof val === 'number') return val;
+           if (!val) return 0;
+           return parseFloat(val.toString().replace(/,/g, '')) || 0;
+        }
+
+        const getString = (val: any) => {
+           if (val === null || val === undefined) return '';
+           return val.toString().trim();
+        }
+
+        return {
+          _rawIndex: index + 2, // Excel row number (approx, accounting for header)
+          _rawRow: row, // Keep for debugging
+          bankName: getString(row['bank name'] || row['bank nam'] || row['bank'] || row['bank names']),
+          payee: getString(row['payee']),
+          address: getString(row['address']),
+          dvNumber: getString(row['dv number'] || row['dv no.'] || row['dv no']),
+          particulars: getString(row['particulars']),
+          amount: parseAmount(row['amount']),
+          date: formattedDate,
+          checkNumber: getString(row['check number'] || row['check no.'] || row['check no']),
+          controlNumber: getString(row['control number'] || row['control no.'] || row['control no']),
+          accountCode: getString(row['account code']),
+          debit: parseAmount(row['debit']),
+          credit: parseAmount(row['credit']),
+          remarks: getString(row['remarks']),
+          fund: getString(row['fund'] || 'General Fund'),
+          responsibilityCenter: getString(row['responsibility center'] || row['resp. center'] || row['resp center'])
+        }
+      })
+      
+      const validTransactions = mappedTransactions.filter(tx => {
+         return !!tx.bankName && !!tx.payee && !!tx.particulars && tx.amount > 0 && !!tx.accountCode;
+      });
+
+      if (validTransactions.length === 0 && mappedTransactions.length > 0) {
+        // Log the exact problem of the first mapped row to make it obvious
+        console.log("Raw sheet data:", jsonData);
+        console.log("Mapped transactions (failed validation):", mappedTransactions);
+        const firstFail = mappedTransactions[0];
+        let missing = [];
+        if (!firstFail.bankName) missing.push("Bank Name");
+        if (!firstFail.payee) missing.push("Payee");
+        if (!firstFail.particulars) missing.push("Particulars");
+        if (firstFail.amount <= 0) missing.push("Amount (>0)");
+        if (!firstFail.accountCode) missing.push("Account Code");
+        
+        alert(`No valid transactions. Checked row ${firstFail._rawIndex}. Missing/invalid fields: ${missing.join(', ')}. Please check the console for more details.`);
+        setIsImporting(false)
+        if (fileInputRef.current) fileInputRef.current.value = ''
+        return
+      }
+
+      if (validTransactions.length === 0) {
+        alert("No data found in the Excel file.")
+        setIsImporting(false)
+        if (fileInputRef.current) fileInputRef.current.value = ''
+        return
+      }
+
+      // Remove debug fields
+      const finalTransactions = validTransactions.map(({ _rawIndex, _rawRow, ...tx }) => tx);
+
+      if (!selectedEntryUser) {
+         alert("No entry user selected to assign imports to.")
+         setIsImporting(false)
+         if (fileInputRef.current) fileInputRef.current.value = ''
+         return
+      }
+
+      const response = await fetch('/api/transactions/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: selectedEntryUser,
+          transactions: finalTransactions
+        })
+      })
+
+      if (!response.ok) {
+         throw new Error('Failed to import transactions')
+      }
+      
+      const result = await response.json()
+      alert(result.message || `Successfully imported ${finalTransactions.length} transactions!`)
+      
+      // Refresh transactions
+      await fetchTransactions(selectedEntryUser)
+      
+    } catch (error) {
+      console.error('Error importing Excel:', error)
+      alert('Failed to import file. Make sure it is a valid Excel file with the correct headers.')
+    } finally {
+      setIsImporting(false)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
   }
 
   const applyFilters = (data: Transaction[]) => {
@@ -314,8 +443,28 @@ export default function ViewerDashboard() {
           </div>
         </div>
 
-        {/* Filters */}
+        {/* Filters and Actions */}
         <div className="bg-white rounded-lg p-6 mb-8 border border-emerald-100 shadow-md">
+          <div className="flex justify-between items-center mb-4">
+             <div className="flex gap-2">
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  accept=".xlsx, .xls, .csv" 
+                  style={{ display: 'none' }} 
+                  onChange={handleFileUpload}
+                />
+                <Button 
+                   onClick={() => fileInputRef.current?.click()}
+                   variant="outline"
+                   className="border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                   disabled={isImporting || !selectedEntryUser}
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  {isImporting ? 'Importing...' : 'Import Excel'}
+                </Button>
+             </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
