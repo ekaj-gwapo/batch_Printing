@@ -202,3 +202,8 @@
   0% { transform: rotate(-25deg); }
   100% { transform: rotate(25deg); }
 }
+
+@keyframes wave {
+  0%, 100% { transform: translateY(-10px) rotate(-80deg); }
+  50% { transform: translateY(-10px) rotate(-140deg); }
+}

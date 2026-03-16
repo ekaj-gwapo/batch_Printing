@@ -26,6 +26,7 @@ export default function LoginPage() {
   const [eggPosition, setEggPosition] = useState(50)
   const [isEggBroken, setIsEggBroken] = useState(false)
   const [isMoving, setIsMoving] = useState(false)
+  const [isWaving, setIsWaving] = useState(false)
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
 
   useEffect(() => {
@@ -41,6 +42,11 @@ export default function LoginPage() {
     if (!isEggRevealed && !isEggBroken) {
       setIsEggRevealed(true)
       setEggPosition(50)
+      // Delay wave until landing (matching the 0.6s transition)
+      setTimeout(() => {
+        setIsWaving(true)
+        setTimeout(() => setIsWaving(false), 2000)
+      }, 600)
     }
   }
 
@@ -144,7 +150,7 @@ export default function LoginPage() {
             bottom: isEggRevealed ? 'calc(100% + 4px)' : '20%',
             left: `${eggPosition}%`,
             transform: `translateX(-50%) translateY(${isMoving ? '-15px' : '0px'})`,
-            transition: 'bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), left 0.8s ease-out, transform 0.2s ease-out, opacity 0.2s ease-in-out',
+            transition: 'bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), left 0.5s ease-out, transform 0.2s ease-out, opacity 0.2s ease-in-out',
           }}
           onMouseEnter={handleEggHover}
           onClick={handleEggClick}
@@ -155,18 +161,50 @@ export default function LoginPage() {
           }}
         >
           {/* Head */}
-          <div className="w-12 h-12 rounded-full overflow-hidden z-20 relative border-[2px] border-white shadow-sm bg-white mb-[-12px]">
+          <div className="w-12 h-12 z-20 relative mb-[-12px]">
             <Image
-              src="/logos/esther egg.jpg"
+              src="/logos/egghead.png"
               alt="Esther"
               fill
-              className="object-cover"
+              className="object-contain drop-shadow-lg"
             />
           </div>
 
-          {/* Body */}
-          <div className="text-5xl md:text-6xl relative z-10 transition-transform duration-200 leading-[0.8]">
+          {/* Hands and Body */}
+          <div className="relative text-5xl md:text-6xl z-10 transition-transform duration-200 leading-[0.8] drop-shadow-md">
+            {/* Left Hand */}
+            <div
+              className={`absolute top-[45%] left-[15px] w-1.5 h-6 bg-[#d4a373] rounded-t-full origin-top flex items-end justify-center transition-all duration-300 pointer-events-none z-[-1] ${isMoving ? 'animate-[run_0.08s_ease-in-out_infinite_alternate]' : ''}`}
+              style={{
+                opacity: isMoving ? 1 : 0,
+                transform: isMoving ? 'translateY(0) rotate(50deg)' : 'translateY(-10px) rotate(0deg)',
+              }}
+            >
+              {/* Fingers */}
+              <div className="flex gap-[1px] mb-[-3px]">
+                <div className="w-[2px] h-[4px] bg-[#c39160] rounded-full" />
+                <div className="w-[2px] h-[5px] bg-[#c39160] rounded-full" />
+                <div className="w-[2px] h-[4px] bg-[#c39160] rounded-full" />
+              </div>
+            </div>
+            
             🥚
+            
+            {/* Right Hand */}
+            <div
+              className={`absolute top-[45%] right-[15px] w-1.5 h-6 bg-[#d4a373] rounded-t-full origin-top flex items-end justify-center transition-all duration-300 pointer-events-none z-[-1] ${isMoving ? 'delay-[40ms] animate-[run_0.08s_ease-in-out_infinite_alternate-reverse]' : isWaving ? 'animate-[wave_0.4s_ease-in-out_infinite]' : ''}`}
+              style={{
+                opacity: isMoving || isWaving ? 1 : 0,
+                transform: isMoving ? 'translateY(0) rotate(-50deg)' : isWaving ? 'translateY(-10px) rotate(-80deg)' : 'translateY(-10px) rotate(0deg)',
+              }}
+            >
+              {/* Fingers */}
+              <div className="flex gap-[1px] mb-[-3px]">
+                <div className="w-[2px] h-[4px] bg-[#c39160] rounded-full" />
+                <div className="w-[2px] h-[5px] bg-[#c39160] rounded-full" />
+                <div className="w-[2px] h-[4px] bg-[#c39160] rounded-full" />
+              </div>
+            </div>
           </div>
 
           {/* Legs */}
@@ -177,8 +215,25 @@ export default function LoginPage() {
               transform: isMoving ? 'translateY(0)' : 'translateY(-20px)',
             }}
           >
-            <div className={`w-1.5 h-6 bg-[#d4a373] rounded-full origin-top ${isMoving ? 'animate-[run_0.15s_ease-in-out_infinite_alternate]' : ''}`}></div>
-            <div className={`w-1.5 h-6 bg-[#d4a373] rounded-full origin-top delay-75 ${isMoving ? 'animate-[run_0.15s_ease-in-out_infinite_alternate-reverse]' : ''}`}></div>
+            {/* Left Leg */}
+            <div className={`w-1.5 h-6 bg-[#d4a373] rounded-t-full origin-top flex items-end justify-center ${isMoving ? 'animate-[run_0.08s_ease-in-out_infinite_alternate]' : ''}`}>
+              {/* Toes */}
+              <div className="flex gap-[1px] mb-[-3px]">
+                <div className="w-[2px] h-[4px] bg-[#c39160] rounded-full" />
+                <div className="w-[2px] h-[5px] bg-[#c39160] rounded-full" />
+                <div className="w-[2px] h-[4px] bg-[#c39160] rounded-full" />
+              </div>
+            </div>
+            
+            {/* Right Leg */}
+            <div className={`w-1.5 h-6 bg-[#d4a373] rounded-t-full origin-top flex items-end justify-center delay-[40ms] ${isMoving ? 'animate-[run_0.08s_ease-in-out_infinite_alternate-reverse]' : ''}`}>
+              {/* Toes */}
+              <div className="flex gap-[1px] mb-[-3px]">
+                <div className="w-[2px] h-[4px] bg-[#c39160] rounded-full" />
+                <div className="w-[2px] h-[5px] bg-[#c39160] rounded-full" />
+                <div className="w-[2px] h-[4px] bg-[#c39160] rounded-full" />
+              </div>
+            </div>
           </div>
         </div>
 
