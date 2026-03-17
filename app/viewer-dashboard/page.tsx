@@ -40,6 +40,7 @@ type Transaction = {
   userId: string
   fund: string
   responsibilityCenter?: string
+  moph?: string
 }
 
 export default function ViewerDashboard() {
@@ -132,12 +133,10 @@ export default function ViewerDashboard() {
   }
 
   const extractPlaces = (txs: Transaction[]) => {
-    const regularFunds = ['General Fund', 'Development Fund', 'Trust Fund', 'Hospital Fund']
     const placeList = Array.from(new Set(
       txs
-        .map(tx => tx.fund)
-        .filter(Boolean)
-        .filter(fund => !regularFunds.includes(fund))
+        .map(tx => tx.moph)
+        .filter((moph): moph is string => !!moph)
     ))
     setPlaces(placeList.sort())
   }
@@ -197,7 +196,8 @@ export default function ViewerDashboard() {
           credit: parseAmount(row['credit']),
           remarks: getString(row['remarks']),
           fund: getString(row['fund'] || 'General Fund'),
-          responsibilityCenter: getString(row['responsibility center'] || row['resp. center'] || row['resp center'])
+          responsibilityCenter: getString(row['responsibility center'] || row['resp. center'] || row['resp center']),
+          moph: getString(row['moph'] || row['location'] || row['place'])
         }
       })
       
@@ -301,7 +301,7 @@ export default function ViewerDashboard() {
     }
 
     if (selectedPlace && selectedPlace !== 'none') {
-      filtered = filtered.filter(tx => tx.fund === selectedPlace)
+      filtered = filtered.filter(tx => tx.moph === selectedPlace)
     }
 
     // Sort by date (newest first) as default
@@ -603,7 +603,8 @@ export default function ViewerDashboard() {
           logo={null}
           entryUserEmail={selectedEntryUserEmail}
           batchId={batchId || undefined}
-          fund={selectedPlace && selectedPlace !== 'none' ? `MOPH - ${selectedPlace}` : selectedFund}
+          fund={selectedFund}
+          moph={selectedPlace && selectedPlace !== 'none' ? selectedPlace : ''}
           bankName={selectedBankName}
         />
       </div>

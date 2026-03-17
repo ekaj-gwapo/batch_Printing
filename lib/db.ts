@@ -47,6 +47,7 @@ export async function initDb() {
       remarks TEXT,
       fund TEXT DEFAULT 'General Fund',
       responsibilityCenter TEXT,
+      moph TEXT,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
     );
@@ -101,6 +102,13 @@ export async function initDb() {
   // Add checkNumber column if it doesn't exist (migration for existing databases)
   try {
     await db.run('ALTER TABLE transactions ADD COLUMN checkNumber TEXT');
+  } catch (error) {
+    // Column already exists, ignore error
+  }
+
+  // Add moph column if it doesn't exist (migration for existing databases)
+  try {
+    await db.run('ALTER TABLE transactions ADD COLUMN moph TEXT');
   } catch (error) {
     // Column already exists, ignore error
   }

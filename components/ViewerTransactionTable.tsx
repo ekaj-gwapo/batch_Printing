@@ -22,6 +22,7 @@ type Transaction = {
   userId: string
   fund: string
   responsibilityCenter?: string
+  moph?: string
 }
 
 type ViewerTransactionTableProps = {

@@ -54,8 +54,8 @@ export async function POST(request: NextRequest) {
         }
 
         await db.run(
-          `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, checkNumber, controlNumber, accountCode, debit, credit, remarks, fund, responsibilityCenter)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, checkNumber, controlNumber, accountCode, debit, credit, remarks, fund, responsibilityCenter, moph)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             id,
             userId,
@@ -74,6 +74,7 @@ export async function POST(request: NextRequest) {
             tx.remarks ? tx.remarks.toString().trim() : '',
             tx.fund ? tx.fund.toString().trim() : 'General Fund',
             tx.responsibilityCenter ? tx.responsibilityCenter.toString().trim() : '',
+            tx.moph ? tx.moph.toString().trim() : '',
           ]
         )
         importedCount++

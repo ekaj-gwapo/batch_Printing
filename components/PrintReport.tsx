@@ -18,7 +18,10 @@ type Transaction = {
   credit: number
   remarks: string
   createdAt: string
+  userId: string
+  fund: string
   responsibilityCenter?: string
+  moph?: string
 }
 
 interface PrintReportProps {
@@ -29,10 +32,11 @@ interface PrintReportProps {
   fund?: string
   bankName?: string
   accountNumber?: string
+  moph?: string
 }
 
 const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
-({ transactions, logo, entryUserEmail, batchId, fund, bankName, accountNumber }, ref) => {
+({ transactions, logo, entryUserEmail, batchId, fund, bankName, accountNumber, moph }, ref) => {
 
 const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0)
 
@@ -82,6 +86,9 @@ return (
   </div>
   <div className="text-right mb-1">
     <p>Fund: <span className="font-bold uppercase border-b border-black inline-block min-w-[150px] text-center">{fund || "GENERAL FUND"}</span></p>
+    {moph && (
+      <p className="mt-1">MOPH: <span className="font-bold uppercase border-b border-black inline-block min-w-[150px] text-center">{moph}</span></p>
+    )}
   </div>
 </div>
 

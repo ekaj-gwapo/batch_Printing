@@ -93,8 +93,8 @@ export async function POST(request: NextRequest) {
     }
 
     await db.run(
-      `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, checkNumber, controlNumber, accountCode, debit, credit, remarks, fund, responsibilityCenter)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO transactions (id, userId, bankName, payee, address, dvNumber, particulars, amount, date, checkNumber, controlNumber, accountCode, debit, credit, remarks, fund, responsibilityCenter, moph)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id,
         userId,
@@ -113,6 +113,7 @@ export async function POST(request: NextRequest) {
         body.remarks ? body.remarks.trim() : '',
         body.fund ? body.fund.trim() : 'General Fund',
         body.responsibilityCenter ? body.responsibilityCenter.trim() : '',
+        body.moph ? body.moph.trim() : '',
       ]
     )
 
@@ -188,7 +189,7 @@ export async function PUT(request: NextRequest) {
     }
 
     await db.run(
-      `UPDATE transactions SET bankName = ?, payee = ?, address = ?, dvNumber = ?, particulars = ?, amount = ?, date = ?, checkNumber = ?, controlNumber = ?, accountCode = ?, debit = ?, credit = ?, remarks = ?, fund = ?, responsibilityCenter = ? WHERE id = ?`,
+      `UPDATE transactions SET bankName = ?, payee = ?, address = ?, dvNumber = ?, particulars = ?, amount = ?, date = ?, checkNumber = ?, controlNumber = ?, accountCode = ?, debit = ?, credit = ?, remarks = ?, fund = ?, responsibilityCenter = ?, moph = ? WHERE id = ?`,
       [
         body.bankName.trim(),
         body.payee.trim(),
@@ -205,6 +206,7 @@ export async function PUT(request: NextRequest) {
         body.remarks ? body.remarks.trim() : '',
         body.fund ? body.fund.trim() : 'General Fund',
         body.responsibilityCenter ? body.responsibilityCenter.trim() : '',
+        body.moph ? body.moph.trim() : '',
         id
       ]
     )
