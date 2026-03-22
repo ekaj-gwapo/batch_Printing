@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowRight, Lock, Eye, FileText, CheckCircle2, UserCircle2, MonitorCheck } from 'lucide-react'
 
-function Confetti() {
+function Confetti() { 
   return (
     <div className="absolute inset-0 z-10 pointer-events-none">
       <div className="confetti-particle bg-red-400" style={{ '--dx': '30px', '--dy': '-40px' } as any}></div>
